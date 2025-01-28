@@ -1,101 +1,151 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [currentSlide, setCurrentSlide] = useState(0);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
+  const slides = [
+    { title: "Scan-Leaf", link: "/scan" },
+    { title: "About-Us", link: "/terms" },
+    { title: "Terms-of-Service", link: "/terms" },
+  ];
+
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
+  const prevSlide = () =>
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+
+  return (
+    <div
+      className="flex items-center justify-center min-h-screen p-8"
+      style={{
+        backgroundImage: "url('/R.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      {/* Main Card */}
+      <div
+        className="w-full max-w-screen-md p-8 shadow-2xl backdrop-blur-md rounded-2xl animate-fadeIn"
+        style={{
+          background: "linear-gradient(135deg, #d4f7dc, #a8e6b1)",
+        }}
+      >
+        {/* Header Section */}
+        <header className="flex flex-col items-center gap-4 mb-8">
+          <Image
+            src="/DALL·E 2025-01-28 21.11.34 - A modern and sleek word logo for 'PLANT-EASE', incorporating a natural and eco-friendly theme. The text 'PLANT-EASE' is styled with a combination of g.webp"
+            alt="App logo"
+            width={180}
+            height={38}
+            priority
+          />
+          <p className="text-center text-gray-700 font-semibold text-lg">
+            Empowering farmers and estate owners with advanced AI for detecting 
+            and managing cinnamon diseases effectively.
+          </p>
+        </header>
+
+        {/* Carousel Section */}
+        <div
+          className="relative w-full max-w-lg p-6 shadow-lg rounded-xl mx-auto animate-slideUp"
+          style={{
+            background: "linear-gradient(to right,rgb(95, 47, 2),rgb(214, 126, 78))",
+          }}
+        >
+          {/* Left Arrow */}
+          <button
+            className="absolute top-1/2 left-4 transform -translate-y-1/2 text-3xl text-white hover:scale-110 transition-transform"
+            onClick={prevSlide}
+            aria-label="Previous Slide"
+          >
+            {"<"}
+          </button>
+
+          {/* Slide Content */}
+          <div
+          className="text-center text-white animate-fadeIn"
+          style={{
+            background: "linear-gradient(145deg,rgb(5, 101, 16),rgb(49, 233, 52))",
+            padding: "20px",
+            borderRadius: "10px",
+          }}
+          >
+          <h2 className="text-3xl font-extrabold text-shadow-lg mb-4">
+          {slides[currentSlide].title}
+          </h2>
+          <p className="mt-2 text-lg leading-relaxed font-semibold">
+          Ready to explore the next step?{" "}
+          </p>
           <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+          href={slides[currentSlide].link}
+          className="inline-block mt-4 px-6 py-3 text-lg font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-full shadow-md transition-all transform hover:scale-105"
+          >
+            Go to {slides[currentSlide].title}
+          </a>
+          </div>
+
+
+
+          {/* Right Arrow */}
+          <button
+            className="absolute top-1/2 right-4 transform -translate-y-1/2 text-3xl text-white hover:scale-110 transition-transform"
+            onClick={nextSlide}
+            aria-label="Next Slide"
+          >
+            {">"}
+          </button>
+        </div>
+
+        {/* Interactive Buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+          <a
+            className="bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-full px-6 py-3 font-semibold shadow-lg hover:scale-105 transition-transform"
             href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
+            Deploy Now
           </a>
           <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
+            className="bg-gray-200 rounded-full px-6 py-3 font-semibold shadow-lg hover:bg-gray-300 hover:scale-105 transition-transform"
             href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Read our docs
+            Read Docs
           </a>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* Footer Section */}
+        <footer className="flex flex-wrap items-center justify-center gap-4 mt-8 text-sm">
+          <a
+            href="https://nextjs.org/learn"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:text-blue-700 transition"
+          >
+            Learn
+          </a>
+          <a
+            href="https://vercel.com/templates"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:text-blue-700 transition"
+          >
+            Templates
+          </a>
+          <a
+            href="https://nextjs.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:text-blue-700 transition"
+          >
+            Visit Next.js →
+          </a>
+        </footer>
+      </div>
     </div>
   );
 }
