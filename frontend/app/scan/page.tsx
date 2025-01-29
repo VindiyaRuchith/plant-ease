@@ -44,35 +44,50 @@ export default function ScanPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <h1 className="text-2xl font-bold mb-4">Scan an Image</h1>
+    <div className="min-h-screen bg-gradient-to-b from-green-200 to-green-400 flex flex-col items-center justify-center p-6">
+      <h1 className="text-4xl font-extrabold text-green-800 mb-6 animate__animated animate__fadeIn">
+        Scan an Image
+      </h1>
 
+      {/* File input with animated transition */}
       <input
         type="file"
         accept="image/*"
         onChange={handleFileChange}
-        className="mb-4"
+        className="mb-4 p-4 rounded-md border-2 border-green-500 shadow-md hover:shadow-xl transition-all ease-in-out duration-300 transform hover:scale-105"
       />
 
+      {/* Submit button with hover animation */}
       <button
         onClick={handleSubmit}
-        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+        className="bg-green-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-green-600 transition-all ease-in-out duration-300 transform hover:scale-105"
       >
         Submit
       </button>
 
-      {error && <p className="text-red-500 mt-4">{error}</p>}
+      {/* Error message with animation */}
+      {error && (
+        <p className="text-red-500 mt-4 text-lg animate__animated animate__shakeX">
+          {error}
+        </p>
+      )}
 
+      {/* Prediction display with animation */}
       {prediction && (
-        <div className="mt-6">
-          <p className="text-xl font-semibold">Prediction: {prediction}</p>
+        <div className="mt-6 animate__animated animate__fadeIn animate__delay-1s">
+          <p className="text-xl font-semibold text-green-800">Prediction: {prediction}</p>
         </div>
       )}
 
+      {/* Heatmap display with fade-in animation */}
       {heatmap && (
-        <div className="mt-6">
-          <p className="text-xl font-semibold mb-4">Heatmap:</p>
-          <img src={`data:image/png;base64,${heatmap}`} alt="HiRes-CAM Heatmap" />
+        <div className="mt-6 animate__animated animate__fadeIn animate__delay-2s">
+          <p className="text-xl font-semibold text-green-800 mb-4">Heatmap:</p>
+          <img
+            src={`data:image/png;base64,${heatmap}`}
+            alt="HiRes-CAM Heatmap"
+            className="rounded-lg shadow-lg hover:shadow-xl transition-all ease-in-out duration-300 transform hover:scale-105"
+          />
         </div>
       )}
     </div>

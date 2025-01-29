@@ -8,7 +8,7 @@ export default function Home() {
 
   const slides = [
     { title: "Scan-Leaf", link: "/scan" },
-    { title: "About-Us", link: "/terms" },
+    { title: "About-Us", link: "/about" },
     { title: "Terms-of-Service", link: "/terms" },
   ];
 
