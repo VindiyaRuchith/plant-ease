@@ -41,7 +41,9 @@ export default function ScanPage() {
     } catch (err: any) {
       setError(err.message || "Something went wrong!");
     }
-  };
+};
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-200 to-green-400 flex flex-col items-center justify-center p-6">
