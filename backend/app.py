@@ -79,6 +79,54 @@ def hires_cam(model, img_array, class_index):
         logging.error(f"Error in HiRes-CAM: {str(e)}")
         raise
 
+import tensorflow as tf
+import numpy as np
+import cv2
+
+def grad_cam(model, img_array, class_index):
+    """Generate a heatmap using Grad-CAM."""
+    try:
+        # Identify the last convolutional layer
+        last_conv_layer = model.get_layer("conv2d_3")
+        if last_conv_layer is None:
+            raise ValueError("Last convolutional layer not found.")
+
+
+        grad_model = tf.keras.models.Model(
+            [model.input], [last_conv_layer.output, model.output]
+        )
+
+        with tf.GradientTape() as tape:
+            conv_outputs, predictions = grad_model(img_array, training=False)
+            loss = predictions[:, class_index]
+
+        # Compute gradients
+        grads = tape.gradient(loss, conv_outputs)
+        pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
+
+        # Multiply pooled grads with feature map output
+        conv_outputs = conv_outputs[0]
+
+        heatmap = tf.reduce_sum(conv_outputs * pooled_grads, axis=-1)
+
+        # Normalize the heatmap
+        heatmap = tf.maximum(heatmap, 0)  # ReLU
+        heatmap /= tf.reduce_max(heatmap) + 1e-8  # Avoid division by zero
+
+        # Convert to NumPy array for OpenCV
+        heatmap = heatmap.numpy()
+
+        # Resize heatmap to match the input image size
+        heatmap = cv2.resize(heatmap, (224, 224))
+
+        return heatmap
+
+    except Exception as e:
+        logging.error(f"Error in Grad-CAM: {str(e)}")
+        raise
+
+
+
 
 @app.route('/classify', methods=['POST'])
 def classify_image():
@@ -90,6 +138,9 @@ def classify_image():
         if file.filename == '':
             return jsonify({"error": "No selected file"}), 400
 
+        # Get CAM type (default to HiRes-CAM)
+        cam_type = request.args.get("cam_type", "hires").lower()
+
         # Save and preprocess the image
         file_path = os.path.join('static', file.filename)
         file.save(file_path)
@@ -99,8 +150,11 @@ def classify_image():
         predictions = model.predict(img_array)
         predicted_class = np.argmax(predictions)
 
-        # Generate HiRes-CAM heatmap
-        heatmap = hires_cam(model, img_array, predicted_class)
+        # Generate selected CAM heatmap
+        if cam_type == "gradcam":
+            heatmap = grad_cam(model, img_array, predicted_class)
+        else:
+            heatmap = hires_cam(model, img_array, predicted_class)
 
         # Load the original image as RGB
         img = Image.open(file_path).convert("RGB")
@@ -112,7 +166,7 @@ def classify_image():
         heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
 
         # Blend the heatmap with the original image
-        alpha = 0.5  # Transparency for the heatmap
+        alpha = 0.5
         superimposed_image = cv2.addWeighted(heatmap, alpha, original_image, 1 - alpha, 0)
 
         # Add the class label to the image
@@ -122,7 +176,7 @@ def classify_image():
             cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2
         )
 
-        # Convert the image to base64 for return
+        # Convert the image to base64
         img_pil = Image.fromarray(cv2.cvtColor(superimposed_image, cv2.COLOR_BGR2RGB))
         buffered = BytesIO()
         img_pil.save(buffered, format="PNG")

@@ -15,35 +15,33 @@ export default function ScanPage() {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (camType: string) => {
     if (!selectedFile) {
-        setError("Please upload an image first.");
-        return;
+      setError("Please upload an image first.");
+      return;
     }
 
     const formData = new FormData();
     formData.append("image", selectedFile);
 
     try {
-        const response = await fetch("http://127.0.0.1:5000/classify", {
-            method: "POST",
-            body: formData,
-        });
+      const response = await fetch(`http://127.0.0.1:5000/classify?cam_type=${camType}`, {
+        method: "POST",
+        body: formData,
+      });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || "Failed to classify the image.");
-        }
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to classify the image.");
+      }
 
-        const data = await response.json();
-        setPrediction(data.prediction);
-        setHeatmap(data.cam_path);
-        setSelectedFile(null); // Clear the file input
+      const data = await response.json();
+      setPrediction(data.prediction);
+      setHeatmap(data.cam_path);
     } catch (err: any) {
-        setError(err.message || "Something went wrong!");
+      setError(err.message || "Something went wrong!");
     }
   };
-
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-200 to-green-400 flex flex-col items-center justify-center p-6">
@@ -51,7 +49,7 @@ export default function ScanPage() {
         Scan an Image
       </h1>
 
-      {/* File input with animated transition */}
+      {/* File input */}
       <input
         type="file"
         accept="image/*"
@@ -59,35 +57,44 @@ export default function ScanPage() {
         className="mb-4 p-4 rounded-md border-2 border-green-500 shadow-md hover:shadow-xl transition-all ease-in-out duration-300 transform hover:scale-105"
       />
 
-      {/* Submit button with hover animation */}
-      <button
-        onClick={handleSubmit}
-        className="bg-green-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-green-600 transition-all ease-in-out duration-300 transform hover:scale-105"
-      >
-        Submit
-      </button>
+      {/* Buttons for HiRes-CAM and Grad-CAM */}
+      <div className="flex gap-4">
+        <button
+          onClick={() => handleSubmit("hires")}
+          className="bg-green-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-green-600 transition-all ease-in-out duration-300 transform hover:scale-105"
+        >
+          Generate HiRes-CAM
+        </button>
 
-      {/* Error message with animation */}
+        <button
+          onClick={() => handleSubmit("gradcam")}
+          className="bg-blue-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-blue-600 transition-all ease-in-out duration-300 transform hover:scale-105"
+        >
+          Generate Grad-CAM
+        </button>
+      </div>
+
+      {/* Error message */}
       {error && (
         <p className="text-red-500 mt-4 text-lg animate__animated animate__shakeX">
           {error}
         </p>
       )}
 
-      {/* Prediction display with animation */}
+      {/* Prediction display */}
       {prediction && (
         <div className="mt-6 animate__animated animate__fadeIn animate__delay-1s">
           <p className="text-xl font-semibold text-green-800">Prediction: {prediction}</p>
         </div>
       )}
 
-      {/* Heatmap display with fade-in animation */}
+      {/* Heatmap display */}
       {heatmap && (
         <div className="mt-6 animate__animated animate__fadeIn animate__delay-2s">
           <p className="text-xl font-semibold text-green-800 mb-4">Heatmap:</p>
           <img
-            src={heatmap ? `data:image/png;base64,${heatmap}` : ""}
-            alt="HiRes-CAM Heatmap"
+            src={`data:image/png;base64,${heatmap}`}
+            alt="XAI Heatmap"
             className="rounded-lg shadow-lg hover:shadow-xl transition-all ease-in-out duration-300 transform hover:scale-105"
           />
         </div>
