@@ -17,31 +17,33 @@ export default function ScanPage() {
 
   const handleSubmit = async () => {
     if (!selectedFile) {
-      setError("Please upload an image first.");
-      return;
+        setError("Please upload an image first.");
+        return;
     }
 
     const formData = new FormData();
     formData.append("image", selectedFile);
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/classify", {
-        method: "POST",
-        body: formData,
-      });
+        const response = await fetch("http://127.0.0.1:5000/classify", {
+            method: "POST",
+            body: formData,
+        });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to classify the image.");
-      }
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || "Failed to classify the image.");
+        }
 
-      const data = await response.json();
-      setPrediction(data.prediction);
-      setHeatmap(data.cam_path);
+        const data = await response.json();
+        setPrediction(data.prediction);
+        setHeatmap(data.cam_path);
+        setSelectedFile(null); // Clear the file input
     } catch (err: any) {
-      setError(err.message || "Something went wrong!");
+        setError(err.message || "Something went wrong!");
     }
   };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-200 to-green-400 flex flex-col items-center justify-center p-6">
@@ -84,7 +86,7 @@ export default function ScanPage() {
         <div className="mt-6 animate__animated animate__fadeIn animate__delay-2s">
           <p className="text-xl font-semibold text-green-800 mb-4">Heatmap:</p>
           <img
-            src={`data:image/png;base64,${heatmap}`}
+            src={heatmap ? `data:image/png;base64,${heatmap}` : ""}
             alt="HiRes-CAM Heatmap"
             className="rounded-lg shadow-lg hover:shadow-xl transition-all ease-in-out duration-300 transform hover:scale-105"
           />
