@@ -25,6 +25,12 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 class_names = ["healthy_cinnamon", "leaf_spot_disease", "rough_bark", "stripe_canker"]
 
 
+import numpy as np
+import tensorflow as tf
+import cv2
+import logging
+from tensorflow.keras.preprocessing.image import load_img, img_to_array
+
 def preprocess_image(image_path, target_size=(224, 224)):
     """Preprocess the uploaded image."""
     try:
@@ -38,18 +44,18 @@ def preprocess_image(image_path, target_size=(224, 224)):
         logging.error(f"Error preprocessing image {image_path}: {str(e)}")
         raise
 
-
 def hires_cam(model, img_array, class_index):
     """Generate a heatmap using HiRes-CAM."""
     try:
-        # Identify the last convolutional layer
-        last_conv_layer = model.get_layer("conv2d_3")
+        # Find the last convolutional layer dynamically
+        last_conv_layer = [layer for layer in model.layers if 'conv' in layer.name][-1]
+
         if last_conv_layer is None:
             raise ValueError("Last convolutional layer not found.")
 
         # Create a model that outputs the last conv layer and predictions
         grad_model = tf.keras.models.Model(
-            [model.inputs], [last_conv_layer.output, model.output]
+            [model.input], [last_conv_layer.output, model.output]
         )
 
         with tf.GradientTape() as tape:
@@ -59,15 +65,16 @@ def hires_cam(model, img_array, class_index):
         # Compute gradients of the target class with respect to feature maps
         grads = tape.gradient(loss, conv_outputs)
 
-        # HiRes-CAM: Clip to positive gradients
-        grads = tf.nn.relu(grads)
+        # Apply HiRes-CAM formula: Multiply gradients with the feature maps directly
+        heatmap = conv_outputs * grads
 
-        # HiRes-CAM: Compute pixel-wise attribution
-        heatmap = grads * conv_outputs
-        heatmap = np.maximum(heatmap, 0)  # ReLU to ensure non-negative
-        heatmap = np.mean(heatmap, axis=-1)[0]  # Combine channel contributions
+        # Ensure non-negative attributions
+        heatmap = np.maximum(heatmap, 0)
 
-        # Normalize heatmap to [0, 1]
+        # Compute mean over feature maps
+        heatmap = np.mean(heatmap, axis=-1)[0]
+
+        # Normalize heatmap
         heatmap = heatmap / (np.max(heatmap) + 1e-8)
 
         # Resize heatmap to input size
@@ -75,9 +82,11 @@ def hires_cam(model, img_array, class_index):
 
         logging.debug("HiRes-CAM heatmap generated successfully.")
         return heatmap
+
     except Exception as e:
         logging.error(f"Error in HiRes-CAM: {str(e)}")
         raise
+
 
 
 from tf_explain.core.grad_cam import GradCAM
