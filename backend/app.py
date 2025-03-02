@@ -17,7 +17,7 @@ CORS(app)  # Enable CORS for all routes
 logging.basicConfig(level=logging.DEBUG)
 
 # Load and compile the model
-model_path = os.path.join('model', 'cinnamon-model.h5')
+model_path = os.path.join('model', 'novel-model.h5')
 model = tf.keras.models.load_model(model_path)
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
