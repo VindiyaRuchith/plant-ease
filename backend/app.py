@@ -9,6 +9,9 @@ from io import BytesIO
 import base64
 import logging
 from flask_cors import CORS
+from tf_keras_vis.gradcam_plus_plus import GradcamPlusPlus
+from tf_keras_vis.utils.scores import CategoricalScore
+from tf_keras_vis.utils.model_modifiers import ReplaceToLinear
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -95,7 +98,7 @@ def get_last_conv_layer(model):
     """Find the last convolutional layer of the model."""
     for layer in reversed(model.layers):
         if isinstance(layer, tf.keras.layers.Conv2D):
-            return layer.name
+            return layer  # Return layer instead of just layer.name
     raise ValueError("No Conv2D layer found in the model.")
 
 @app.route('/classify', methods=['POST'])
@@ -115,18 +118,23 @@ def classify_image():
         predictions = model.predict(img_array)
         predicted_class = np.argmax(predictions)
 
-        # Check cam_type (default to HiRes-CAM)
         cam_type = request.args.get("cam_type", "hirescam")
 
         if cam_type == "gradcam":
-            last_conv_layer_name = get_last_conv_layer(model)
-            explainer = GradCAM()
-            heatmap = explainer.explain(
-                validation_data=(img_array, None),
-                model=model,
-                class_index=predicted_class,
-                layer_name=last_conv_layer_name  # Ensure it targets the last Conv2D layer
-            )
+            # Define Grad-CAM++ instance
+            gradcam_plus_plus = GradcamPlusPlus(model, model_modifier=ReplaceToLinear(), clone=False)
+
+            # Define the score function
+            score = CategoricalScore([predicted_class])
+
+            # Generate heatmap
+            heatmap = gradcam_plus_plus(score, img_array)
+
+            # Normalize and resize
+            heatmap = np.maximum(heatmap, 0)[0]
+            heatmap = heatmap / (np.max(heatmap) + 1e-8)
+            heatmap = cv2.resize(heatmap, (224, 224))
+
         else:
             heatmap = hires_cam(model, img_array, predicted_class)
 
