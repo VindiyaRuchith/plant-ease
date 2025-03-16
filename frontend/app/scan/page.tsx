@@ -2,9 +2,6 @@
 
 import React, { useState } from "react";
 import { FileUpload } from "@/components/ui/file-upload";
-import { motion } from "framer-motion";
-import { Boxes } from "@/components/ui/background-boxes";
-import { AuroraBackground } from "@/components/ui/aurora-background";
 
 export default function ScanPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -43,17 +40,16 @@ export default function ScanPage() {
       }
 
       const data = await response.json();
-      setPrediction(data.prediction);
-      setHeatmap(data.cam_path);
+      setPrediction(data.prediction); // Classification result
+      setHeatmap(data.cam_path); // Heatmap image
+      setSelectedFile(null); // Reset file selection
     } catch (err: any) {
       setError(err.message || "Something went wrong!");
     }
   };
 
   return (
-    <div
-      className="w-full min-h-screen bg-gradient-to-b from-green-400 via-green-600 to-green-800" // Apply gradient background here
-    >
+    <div className="w-full min-h-screen bg-gradient-to-b from-green-400 via-green-600 to-green-800">
       <div className="w-full max-w-4xl mx-auto min-h-96 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg p-6 flex flex-col items-center">
         <h1 className="text-3xl font-extrabold text-green-800 dark:text-green-300 mb-6">
           Scan an Image
@@ -103,6 +99,21 @@ export default function ScanPage() {
               className="rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
             />
           </div>
+        )}
+
+        {/* Reset Button */}
+        {(prediction || heatmap) && (
+          <button
+            onClick={() => {
+              setSelectedFile(null);
+              setPrediction(null);
+              setHeatmap(null);
+              setError(null);
+            }}
+            className="bg-red-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-red-600 transition-all transform hover:scale-105 mt-4"
+          >
+            Upload New Image
+          </button>
         )}
       </div>
     </div>

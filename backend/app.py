@@ -115,28 +115,16 @@ def classify_image():
         file.save(file_path)
         img, img_array = preprocess_image(file_path)
 
-        predictions = model.predict(img_array)
+        predictions = np.random.rand(1, 4)  # Dummy predictions (Replace with model.predict)
         predicted_class = np.argmax(predictions)
+        confidence = float(predictions[0][predicted_class])  # Convert to Python float
 
-        cam_type = request.args.get("cam_type", "hirescam")
+        CONFIDENCE_THRESHOLD = 0.8  
 
-        if cam_type == "gradcam":
-            # Define Grad-CAM++ instance
-            gradcam_plus_plus = GradcamPlusPlus(model, model_modifier=ReplaceToLinear(), clone=False)
+        if confidence < CONFIDENCE_THRESHOLD:
+            return jsonify({"error": "The image does not appear to be a cinnamon leaf."}), 400
 
-            # Define the score function
-            score = CategoricalScore([predicted_class])
-
-            # Generate heatmap
-            heatmap = gradcam_plus_plus(score, img_array)
-
-            # Normalize and resize
-            heatmap = np.maximum(heatmap, 0)[0]
-            heatmap = heatmap / (np.max(heatmap) + 1e-8)
-            heatmap = cv2.resize(heatmap, (224, 224))
-
-        else:
-            heatmap = hires_cam(model, img_array, predicted_class)
+        heatmap = hires_cam(model, img_array, predicted_class)
 
         # Overlay heatmap on image
         img = Image.open(file_path).convert("RGB")
@@ -148,12 +136,19 @@ def classify_image():
 
         superimposed_image = cv2.addWeighted(heatmap, 0.5, original_image, 1 - 0.5, 0)
 
-        # Add class label
-        label = class_names[predicted_class]
-        cv2.putText(
-            superimposed_image, label, (10, 30),
-            cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2
-        )
+        # Show only confidence percentage on heatmap
+        confidence_percentage = round(confidence * 100, 2)
+        text = f"Confidence: {confidence_percentage}%"
+
+        # Put text with a black outline for visibility
+        text_position = (10, 30)
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        font_scale = 0.8
+        font_color = (255, 255, 255)  # White
+        thickness = 2
+
+        cv2.putText(superimposed_image, text, text_position, font, font_scale, (0, 0, 0), thickness + 2)
+        cv2.putText(superimposed_image, text, text_position, font, font_scale, font_color, thickness)
 
         # Convert to base64
         img_pil = Image.fromarray(cv2.cvtColor(superimposed_image, cv2.COLOR_BGR2RGB))
@@ -161,12 +156,16 @@ def classify_image():
         img_pil.save(buffered, format="PNG")
         img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
 
-        return jsonify({'prediction': label, 'cam_path': img_str})
+        return jsonify({
+            'confidence': confidence_percentage,
+            'prediction': class_names[predicted_class],  # Add predicted class name
+            'cam_path': img_str
+        })
+
 
     except Exception as e:
         logging.error(f"Error during classification: {str(e)}")
         return jsonify({"error": f"Error during classification: {str(e)}"}), 500
-
 
 if __name__ == '__main__':
     app.run(debug=True)
