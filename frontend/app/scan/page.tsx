@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image"; // ✅ Use Next.js Image
+import Image from "next/image"; 
 import { FileUpload } from "@/components/ui/file-upload";
 
 export default function ScanPage() {
@@ -41,9 +41,9 @@ export default function ScanPage() {
       }
 
       const data = await response.json();
-      setPrediction(data.prediction); // Classification result
-      setHeatmap(data.cam_path); // Heatmap image
-      setSelectedFile(null); // Reset file selection
+      setPrediction(data.prediction); 
+      setHeatmap(data.cam_path); 
+      setSelectedFile(null); 
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
