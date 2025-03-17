@@ -8,7 +8,7 @@ from modules.xai_handler import XAIHandler
 from modules.utils import Utils
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["https://vindiyaruchith.github.io/plant-ease"])
 logging.basicConfig(level=logging.DEBUG)
 
 # Load model

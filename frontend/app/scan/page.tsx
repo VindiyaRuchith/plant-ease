@@ -32,6 +32,7 @@ export default function ScanPage() {
         {
           method: "POST",
           body: formData,
+          mode: 'no-cors',
         }
       );
 
