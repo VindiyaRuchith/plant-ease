@@ -1,111 +1,29 @@
 import os
-import numpy as np
-import tensorflow as tf
-from flask import Flask, request, jsonify, render_template
-from tensorflow.keras.preprocessing.image import load_img, img_to_array
-import cv2
-from PIL import Image
-from io import BytesIO
-import base64
 import logging
+from flask import Flask, request, jsonify
 from flask_cors import CORS
-from tf_keras_vis.gradcam_plus_plus import GradcamPlusPlus
-from tf_keras_vis.utils.scores import CategoricalScore
-from tf_keras_vis.utils.model_modifiers import ReplaceToLinear
+from modules.model_handler import ModelHandler
+from modules.image_processor import ImageProcessor
+from modules.xai_handler import XAIHandler
+from modules.utils import Utils
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
-
-# Set up logging
+CORS(app)
 logging.basicConfig(level=logging.DEBUG)
 
-# Load and compile the model
-model_path = os.path.join('model', 'novel-model.h5')
-model = tf.keras.models.load_model(model_path)
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+# Load model
+MODEL_PATH = os.path.join('model', 'novel-model.h5')
+model_handler = ModelHandler(MODEL_PATH)
+xai_handler = XAIHandler(model_handler.model)
 
 # Class names
 class_names = ["healthy_cinnamon", "leaf_spot_disease", "rough_bark", "stripe_canker"]
-
-
-import numpy as np
-import tensorflow as tf
-import cv2
-import logging
-from tensorflow.keras.preprocessing.image import load_img, img_to_array
-
-def preprocess_image(image_path, target_size=(224, 224)):
-    """Preprocess the uploaded image."""
-    try:
-        img = load_img(image_path, target_size=target_size)
-        img_array = img_to_array(img)
-        img_array = np.expand_dims(img_array, axis=0)
-        img_array /= 255.0  # Normalize to [0, 1]
-        logging.debug(f"Image preprocessed successfully: {image_path}")
-        return img, img_array
-    except Exception as e:
-        logging.error(f"Error preprocessing image {image_path}: {str(e)}")
-        raise
-
-def hires_cam(model, img_array, class_index):
-    """Generate a heatmap using HiRes-CAM."""
-    try:
-        # Find the last convolutional layer dynamically
-        last_conv_layer = [layer for layer in model.layers if 'conv' in layer.name][-1]
-
-        if last_conv_layer is None:
-            raise ValueError("Last convolutional layer not found.")
-
-        # Create a model that outputs the last conv layer and predictions
-        grad_model = tf.keras.models.Model(
-            [model.input], [last_conv_layer.output, model.output]
-        )
-
-        with tf.GradientTape() as tape:
-            conv_outputs, predictions = grad_model(img_array)
-            loss = predictions[:, class_index]  # Target class loss
-
-        # Compute gradients of the target class with respect to feature maps
-        grads = tape.gradient(loss, conv_outputs)
-
-        # Apply HiRes-CAM formula: Multiply gradients with the feature maps directly
-        heatmap = conv_outputs * grads
-
-        # Ensure non-negative attributions
-        heatmap = np.maximum(heatmap, 0)
-
-        # Compute mean over feature maps
-        heatmap = np.mean(heatmap, axis=-1)[0]
-
-        # Normalize heatmap
-        heatmap = heatmap / (np.max(heatmap) + 1e-8)
-
-        # Resize heatmap to input size
-        heatmap = cv2.resize(heatmap, (224, 224))
-
-        logging.debug("HiRes-CAM heatmap generated successfully.")
-        return heatmap
-
-    except Exception as e:
-        logging.error(f"Error in HiRes-CAM: {str(e)}")
-        raise
-
-
-
-from tf_explain.core.grad_cam import GradCAM
-
-def get_last_conv_layer(model):
-    """Find the last convolutional layer of the model."""
-    for layer in reversed(model.layers):
-        if isinstance(layer, tf.keras.layers.Conv2D):
-            return layer  # Return layer instead of just layer.name
-    raise ValueError("No Conv2D layer found in the model.")
 
 @app.route('/classify', methods=['POST'])
 def classify_image():
     try:
         if 'image' not in request.files:
-            return jsonify({"error": "No file part"}), 400
+            return jsonify({"error": "No file provided"}), 400
 
         file = request.files['image']
         if file.filename == '':
@@ -113,59 +31,27 @@ def classify_image():
 
         file_path = os.path.join('static', file.filename)
         file.save(file_path)
-        img, img_array = preprocess_image(file_path)
+        img, img_array = ImageProcessor.preprocess_image(file_path)
 
-        predictions = np.random.rand(1, 4)  # Dummy predictions (Replace with model.predict)
-        predicted_class = np.argmax(predictions)
-        confidence = float(predictions[0][predicted_class])  # Convert to Python float
+        predictions = model_handler.predict(img_array)
+        predicted_class = predictions.argmax()
+        confidence = float(predictions[0][predicted_class])
 
-        CONFIDENCE_THRESHOLD = 0.8  
-
-        if confidence < CONFIDENCE_THRESHOLD:
+        if confidence < 0.8:
             return jsonify({"error": "The image does not appear to be a cinnamon leaf."}), 400
 
-        heatmap = hires_cam(model, img_array, predicted_class)
-
-        # Overlay heatmap on image
-        img = Image.open(file_path).convert("RGB")
-        original_image = np.array(img)
-        original_image = cv2.resize(original_image, (224, 224))
-
-        heatmap = np.uint8(255 * heatmap)
-        heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
-
-        superimposed_image = cv2.addWeighted(heatmap, 0.5, original_image, 1 - 0.5, 0)
-
-        # Show only confidence percentage on heatmap
-        confidence_percentage = round(confidence * 100, 2)
-        text = f"Confidence: {confidence_percentage}%"
-
-        # Put text with a black outline for visibility
-        text_position = (10, 30)
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        font_scale = 0.8
-        font_color = (255, 255, 255)  # White
-        thickness = 2
-
-        cv2.putText(superimposed_image, text, text_position, font, font_scale, (0, 0, 0), thickness + 2)
-        cv2.putText(superimposed_image, text, text_position, font, font_scale, font_color, thickness)
-
-        # Convert to base64
-        img_pil = Image.fromarray(cv2.cvtColor(superimposed_image, cv2.COLOR_BGR2RGB))
-        buffered = BytesIO()
-        img_pil.save(buffered, format="PNG")
-        img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
+        heatmap = xai_handler.hires_cam(img_array, predicted_class)
+        img_str = Utils.overlay_heatmap(file_path, heatmap, confidence)
 
         return jsonify({
-            'confidence': confidence_percentage,
-            'prediction': class_names[predicted_class],  # Add predicted class name
+            'confidence': round(confidence * 100, 2),
+            'prediction': class_names[predicted_class],
             'cam_path': img_str
         })
 
-
     except Exception as e:
         logging.error(f"Error during classification: {str(e)}")
-        return jsonify({"error": f"Error during classification: {str(e)}"}), 500
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
