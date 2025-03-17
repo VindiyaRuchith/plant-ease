@@ -41,7 +41,7 @@ export default function AuroraBackgroundDemo() {
                   href="/plant-ease/scan"
                   className="inline-block mt-4 px-6 py-3 text-lg font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-full shadow-md transition-all transform hover:scale-105"
                 >
-                  Scan Your Image Now
+                  <a>Scan Your Image Now</a>
                 </Link>
               </div>
             </div>
