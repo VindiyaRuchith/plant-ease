@@ -17,7 +17,7 @@ model_handler = ModelHandler(MODEL_PATH)
 xai_handler = XAIHandler(model_handler.model)
 
 # Class names
-class_names = ["healthy_cinnamon", "leaf_spot_disease", "rough_bark", "stripe_canker"]
+class_names = ["healthy cinnamon", "leaf spot disease", "rough bark", "stripe canker"]
 
 @app.route('/classify', methods=['POST'])
 def classify_image():
@@ -37,14 +37,13 @@ def classify_image():
         predicted_class = predictions.argmax()
         confidence = float(predictions[0][predicted_class])
 
-        if confidence < 0.8:
+        if confidence < 0.7:
             return jsonify({"error": "The image does not appear to be a cinnamon leaf."}), 400
 
         heatmap = xai_handler.hires_cam(img_array, predicted_class)
         img_str = Utils.overlay_heatmap(file_path, heatmap, confidence)
 
         return jsonify({
-            'confidence': round(confidence * 100, 2),
             'prediction': class_names[predicted_class],
             'cam_path': img_str
         })

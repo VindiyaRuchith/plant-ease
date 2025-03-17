@@ -71,7 +71,7 @@ export default function ScanPage() {
             onClick={() => handleSubmit("gradcam")}
             className="bg-blue-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-blue-600 transition-all transform hover:scale-105"
           >
-            Generate Grad-CAM
+            Generate Grad-CAM++
           </button>
         </div>
 

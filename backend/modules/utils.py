@@ -16,8 +16,6 @@ class Utils:
         heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
         superimposed_image = cv2.addWeighted(heatmap, 0.5, original_image, 1 - 0.5, 0)
 
-        text = f"Confidence: {round(confidence * 100, 2)}%"
-        cv2.putText(superimposed_image, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
 
         return Utils.image_to_base64(superimposed_image)
 
