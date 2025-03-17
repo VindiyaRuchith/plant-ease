@@ -1,5 +1,5 @@
 "use client";
-
+import Link from 'next/link';
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay, Navigation } from "swiper/modules";
 import "swiper/css";
@@ -37,12 +37,12 @@ export default function AuroraBackgroundDemo() {
                   width: "100%",
                 }}
               >
-                <a
+                <Link
                   href="/plant-ease/scan"
                   className="inline-block mt-4 px-6 py-3 text-lg font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-full shadow-md transition-all transform hover:scale-105"
                 >
                   Scan Your Image Now
-                </a>
+                </Link>
               </div>
             </div>
           </SwiperSlide>
@@ -61,12 +61,12 @@ export default function AuroraBackgroundDemo() {
                   width: "100%",
                 }}
               >
-                <a
+                <Link
                   href="/plant-ease/about"
                   className="inline-block mt-4 px-6 py-3 text-lg font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-full shadow-md transition-all transform hover:scale-105"
                 >
                   Learn More About Us
-                </a>
+                </Link>
               </div>
             </div>
           </SwiperSlide>
@@ -85,12 +85,12 @@ export default function AuroraBackgroundDemo() {
                   width: "100%",
                 }}
               >
-                <a
-                  href="/plant-ease/terms"
+                <Link
+                  href="/terms"
                   className="inline-block mt-4 px-6 py-3 text-lg font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-full shadow-md transition-all transform hover:scale-105"
                 >
-                  Read Our Terms of Service
-                </a>
+                Read Our Terms of Service
+                </Link>
               </div>
             </div>
           </SwiperSlide>
