@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image"; // ✅ Use Next.js Image
 import { FileUpload } from "@/components/ui/file-upload";
 
 export default function ScanPage() {
@@ -43,8 +44,12 @@ export default function ScanPage() {
       setPrediction(data.prediction); // Classification result
       setHeatmap(data.cam_path); // Heatmap image
       setSelectedFile(null); // Reset file selection
-    } catch (err: any) {
-      setError(err.message || "Something went wrong!");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Something went wrong!");
+      }
     }
   };
 
@@ -93,9 +98,11 @@ export default function ScanPage() {
             <p className="text-xl font-semibold text-green-800 dark:text-green-300 mb-4">
               Heatmap:
             </p>
-            <img
+            <Image
               src={`data:image/png;base64,${heatmap}`}
               alt="XAI Heatmap"
+              width={500} // Adjust width as needed
+              height={300} // Adjust height as needed
               className="rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
             />
           </div>
