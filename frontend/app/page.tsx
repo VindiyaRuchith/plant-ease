@@ -38,7 +38,7 @@ export default function AuroraBackgroundDemo() {
                 }}
               >
                 <a
-                  href="/scan"
+                  href="/plant-ease/scan"
                   className="inline-block mt-4 px-6 py-3 text-lg font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-full shadow-md transition-all transform hover:scale-105"
                 >
                   Scan Your Image Now
@@ -62,7 +62,7 @@ export default function AuroraBackgroundDemo() {
                 }}
               >
                 <a
-                  href="/about"
+                  href="/plant-ease/about"
                   className="inline-block mt-4 px-6 py-3 text-lg font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-full shadow-md transition-all transform hover:scale-105"
                 >
                   Learn More About Us
@@ -86,7 +86,7 @@ export default function AuroraBackgroundDemo() {
                 }}
               >
                 <a
-                  href="/terms"
+                  href="/plant-ease/terms"
                   className="inline-block mt-4 px-6 py-3 text-lg font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-full shadow-md transition-all transform hover:scale-105"
                 >
                   Read Our Terms of Service
