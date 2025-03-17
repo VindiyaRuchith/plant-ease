@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint . --config ./eslint.config.mjs --ext .js,.ts,.jsx,.tsx"
   },
   "dependencies": {
     "@tabler/icons-react": "^3.29.0",
