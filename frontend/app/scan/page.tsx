@@ -28,11 +28,10 @@ export default function ScanPage() {
 
     try {
       const response = await fetch(
-        ` https://flask-backend-426544169885.us-central1.run.app/classify?cam_type=${camType}`,
+        `http://127.0.0.1:5000/classify?cam_type=${camType}`,
         {
           method: "POST",
           body: formData,
-          mode: 'no-cors',
         }
       );
 
