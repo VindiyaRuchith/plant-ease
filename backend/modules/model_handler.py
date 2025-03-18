@@ -1,13 +1,18 @@
 import os
-import numpy as np
 import tensorflow as tf
-from tensorflow.keras.models import load_model
+from google.cloud import storage
 
 class ModelHandler:
-    def __init__(self, model_path):
-        self.model = load_model(model_path)
+    def __init__(self, model_path, bucket_name, blob_name, credentials_info):
+        self.download_model(model_path, bucket_name, blob_name, credentials_info)
+        self.model = tf.keras.models.load_model(model_path)
+
+    def download_model(self, model_path, bucket_name, blob_name, credentials_info):
+        storage_client = storage.Client(credentials=credentials_info)
+        bucket = storage_client.bucket(bucket_name)
+        blob = bucket.blob(blob_name)
+        blob.download_to_filename(model_path)
 
     def predict(self, img_array):
-        """Make predictions using the model."""
         predictions = self.model.predict(img_array)
         return predictions
