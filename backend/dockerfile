@@ -1,17 +1,31 @@
-# Use official Python image as base
+# Use an official Python runtime as a parent image
 FROM python:3.9
 
-# Set working directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy all files to container
-COPY . /app
+# Install system dependencies (fix OpenCV issue)
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install dependencies
+# Copy only requirements first for better caching
+COPY requirements.txt /app/
+
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose port 8080 (Google Cloud Run default port)
+# Copy the rest of the app files
+COPY . /app/
+
+# Expose the correct port (Google Cloud Run uses 8080)
 EXPOSE 8080
 
-# Run the Flask app
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8080", "app:app"]
+# Set environment variables
+ENV CUDA_VISIBLE_DEVICES=""
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
+ENV PORT=8080
+
+# Use gunicorn for better performance
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "app:app"]

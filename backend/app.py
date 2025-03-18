@@ -12,7 +12,7 @@ CORS(app, origins=["https://vindiyaruchith.github.io/plant-ease"])
 logging.basicConfig(level=logging.DEBUG)
 
 # Load model
-MODEL_PATH = os.path.join('model', 'novel-model.h5')
+MODEL_PATH = os.path.join('model', 'novel-model-upgraded.keras')
 model_handler = ModelHandler(MODEL_PATH)
 xai_handler = XAIHandler(model_handler.model)
 
@@ -53,5 +53,4 @@ def classify_image():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 8080))  # Google Cloud assigns a port
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 8080)), debug=True)
