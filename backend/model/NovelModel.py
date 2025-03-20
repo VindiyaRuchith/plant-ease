@@ -104,7 +104,7 @@ result = model.fit(
 model.build(input_shape=(None, 224, 224, 3))
 
 # Now save the model
-model.save(r"C:\Users\Vindiya\Desktop\PLANT-EASE\backend\models\novel-model-upgraded.keras", save_format="keras")
+model.save(r"C:\Users\Vindiya\Desktop\PLANT-EASE\backend\models\novel-model.h5")
 # Test saved model
 from tensorflow.keras.models import load_model
 loaded_model = load_model(r"C:\Users\Vindiya\Desktop\PLANT-EASE\backend\models\novel-model.h5")

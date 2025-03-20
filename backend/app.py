@@ -6,25 +6,14 @@ from modules.model_handler import ModelHandler
 from modules.image_processor import ImageProcessor
 from modules.xai_handler import XAIHandler
 from modules.utils import Utils
-import json
 
 app = Flask(__name__)
 CORS(app)
 logging.basicConfig(level=logging.DEBUG)
 
-# Cloud Storage Configuration
-BUCKET_NAME = "plantease-bucket"  # Replace with your bucket name
-BLOB_NAME = "novel-model-upgraded.keras"  # Replace with your model file name
-
-# Load credentials from environment variable
-credentials_json = os.environ.get("GOOGLE_CREDENTIALS_JSON")
-credentials_info = json.loads(credentials_json)
-
-# Local Model Path
-MODEL_PATH = "novel-model-upgraded.keras"
-
 # Load model
-model_handler = ModelHandler(MODEL_PATH, BUCKET_NAME, BLOB_NAME, credentials_info)
+MODEL_PATH = os.path.join('model', 'novel-model.h5')
+model_handler = ModelHandler(MODEL_PATH)
 xai_handler = XAIHandler(model_handler.model)
 
 # Class names
