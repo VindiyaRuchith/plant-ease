@@ -14,8 +14,7 @@ class Utils:
 
         heatmap = np.uint8(255 * heatmap)
         heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
-        superimposed_image = cv2.addWeighted(heatmap, 0.5, original_image, 1 - 0.5, 0)
-
+        superimposed_image = cv2.addWeighted(heatmap, 0.5, original_image, 0.5, 0)
 
         return Utils.image_to_base64(superimposed_image)
 

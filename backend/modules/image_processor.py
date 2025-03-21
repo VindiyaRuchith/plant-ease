@@ -1,5 +1,4 @@
 import numpy as np
-import cv2
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 
 class ImageProcessor:
