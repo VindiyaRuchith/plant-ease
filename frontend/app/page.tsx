@@ -61,12 +61,12 @@ export default function AuroraBackgroundDemo() {
                   width: "100%",
                 }}
               >
-                <a
+                <Link
                   href="/about"
                   className="inline-block mt-4 px-6 py-3 text-lg font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-full shadow-md transition-all transform hover:scale-105"
                 >
                   Learn More About Us
-                </a>
+                </Link>
               </div>
             </div>
           </SwiperSlide>
@@ -85,12 +85,12 @@ export default function AuroraBackgroundDemo() {
                   width: "100%",
                 }}
               >
-                <a
+                <Link
                   href="/terms"
                   className="inline-block mt-4 px-6 py-3 text-lg font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-full shadow-md transition-all transform hover:scale-105"
                 >
                   Read Our Terms of Service
-                </a>
+                </Link>
               </div>
             </div>
           </SwiperSlide>
