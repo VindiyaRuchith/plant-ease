@@ -5,7 +5,7 @@ import { Pagination, Autoplay, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation"; // Import navigation styles
-
+import Link from 'next/link';
 import { AuroraBackground } from "@/components/ui/aurora-background";
 import { Boxes } from "@/components/ui/background-boxes";
 
@@ -37,12 +37,12 @@ export default function AuroraBackgroundDemo() {
                   width: "100%",
                 }}
               >
-                <a
+                <Link
                   href="/scan"
                   className="inline-block mt-4 px-6 py-3 text-lg font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-full shadow-md transition-all transform hover:scale-105"
                 >
                   Scan Your Image Now
-                </a>
+                </Link>
               </div>
             </div>
           </SwiperSlide>
