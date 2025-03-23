@@ -28,7 +28,7 @@ export default function ScanPage() {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8080/classify?cam_type=${camType}`,
+        `https://vindiya.pythonanywhere.com/classify?cam_type=${camType}`,
         {
           method: "POST",
           body: formData,
