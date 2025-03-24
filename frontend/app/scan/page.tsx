@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image"; 
+import Image from "next/image";
 import { FileUpload } from "@/components/ui/file-upload";
 
 export default function ScanPage() {
@@ -9,10 +9,17 @@ export default function ScanPage() {
   const [prediction, setPrediction] = useState<string | null>(null);
   const [heatmap, setHeatmap] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [resetKey, setResetKey] = useState(0); // To force re-render FileUpload
 
   const handleFileUpload = (files: File[]) => {
     if (files.length > 0) {
-      setSelectedFile(files[0]);
+      const file = files[0];
+      if (!file.type.startsWith("image/")) {
+        setError("Only image files are allowed.");
+        return;
+      }
+      setSelectedFile(file);
       setError(null);
     }
   };
@@ -26,9 +33,10 @@ export default function ScanPage() {
     const formData = new FormData();
     formData.append("image", selectedFile);
 
+    setIsLoading(true);
     try {
       const response = await fetch(
-        `https://fyp-556001537402.asia-south1.run.app//classify?cam_type=${camType}`,
+        `https://fyp-556001537402.asia-south1.run.app/classify?cam_type=${camType}`,
         {
           method: "POST",
           body: formData,
@@ -41,16 +49,25 @@ export default function ScanPage() {
       }
 
       const data = await response.json();
-      setPrediction(data.prediction); 
-      setHeatmap(data.cam_path); 
-      setSelectedFile(null); 
+      setPrediction(data.prediction);
+      setHeatmap(data.cam_path);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
       } else {
         setError("Something went wrong!");
       }
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const handleReset = () => {
+    setSelectedFile(null);
+    setPrediction(null);
+    setHeatmap(null);
+    setError(null);
+    setResetKey((prev) => prev + 1); // re-render FileUpload
   };
 
   return (
@@ -61,24 +78,39 @@ export default function ScanPage() {
         </h1>
 
         {/* File Upload Component */}
-        <FileUpload onChange={handleFileUpload} />
+        <FileUpload key={resetKey} onChange={handleFileUpload} />
 
-        {/* Buttons for HiRes-CAM and Grad-CAM */}
+        {/* Buttons for HiRes-CAM and Grad-CAM++ */}
         <div className="flex gap-4 mt-6">
           <button
             onClick={() => handleSubmit("hires")}
-            className="bg-green-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-green-600 transition-all transform hover:scale-105"
+            disabled={!selectedFile || isLoading}
+            className={`bg-green-500 text-white px-6 py-3 rounded-md shadow-md transition-all transform hover:scale-105 ${
+              !selectedFile || isLoading
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-green-600"
+            }`}
           >
             Generate HiRes-CAM
           </button>
 
           <button
             onClick={() => handleSubmit("gradcam")}
-            className="bg-blue-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-blue-600 transition-all transform hover:scale-105"
+            disabled={!selectedFile || isLoading}
+            className={`bg-blue-500 text-white px-6 py-3 rounded-md shadow-md transition-all transform hover:scale-105 ${
+              !selectedFile || isLoading
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-blue-600"
+            }`}
           >
             Generate Grad-CAM++
           </button>
         </div>
+
+        {/* Loading */}
+        {isLoading && (
+          <p className="text-yellow-400 mt-4 text-lg">Processing image...</p>
+        )}
 
         {/* Error message */}
         {error && <p className="text-red-500 mt-4 text-lg">{error}</p>}
@@ -101,23 +133,18 @@ export default function ScanPage() {
             <Image
               src={`data:image/png;base64,${heatmap}`}
               alt="XAI Heatmap"
-              width={500} // Adjust width as needed
-              height={300} // Adjust height as needed
+              width={500}
+              height={300}
               className="rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
             />
           </div>
         )}
 
         {/* Reset Button */}
-        {(prediction || heatmap) && (
+        {(prediction || heatmap || selectedFile) && (
           <button
-            onClick={() => {
-              setSelectedFile(null);
-              setPrediction(null);
-              setHeatmap(null);
-              setError(null);
-            }}
-            className="bg-red-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-red-600 transition-all transform hover:scale-105 mt-4"
+            onClick={handleReset}
+            className="bg-red-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-red-600 transition-all transform hover:scale-105 mt-6"
           >
             Upload New Image
           </button>
@@ -126,4 +153,3 @@ export default function ScanPage() {
     </div>
   );
 }
-
