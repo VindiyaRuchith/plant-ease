@@ -1,6 +1,7 @@
 // pages/about.tsx
 
 import { FaSeedling, FaBrain, FaEnvelope, FaLeaf } from 'react-icons/fa';
+import { Mail } from 'lucide-react';
 
 const AboutUs = () => {
   return (
@@ -52,7 +53,10 @@ const AboutUs = () => {
             We are always looking to improve PLANT-EASE. 
             If you have feedback, suggestions, or need help, feel free to reach out!
           </p>
-          <p className="text-green-900 font-semibold mt-2">Email: support@plant-ease.com</p>
+          <a href="plantease@gmail.com" className="flex items-center space-x-2 text-blue-600 hover:underline">
+            <Mail className="w-5 h-5" />
+            <span>Email Us</span>
+          </a>
         </div>
       </div>
 
