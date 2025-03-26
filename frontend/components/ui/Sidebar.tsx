@@ -14,7 +14,7 @@ export default function Sidebar() {
       {/* Menu Button */}
       <button
         onClick={toggleSidebar}
-        className="fixed top-4 left-4 z-50 p-2 rounded bg-gray-800 text-white"
+        className="fixed top-4 left-4 z-[9999] p-2 rounded bg-gray-800 text-white"
       >
         {isOpen ? <X /> : <Menu />}
       </button>
