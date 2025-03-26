@@ -29,7 +29,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Sidebar /> 
-        <main className="p-4">{children}</main>
+        <main className="py-4">{children}</main>
         
       </body>
     </html>
