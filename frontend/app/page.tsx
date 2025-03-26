@@ -4,24 +4,24 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import "swiper/css/navigation"; // Import navigation styles
-import Link from 'next/link';
+import "swiper/css/navigation";
+import Link from "next/link";
 import { AuroraBackground } from "@/components/ui/aurora-background";
 import { Boxes } from "@/components/ui/background-boxes";
 
 export default function AuroraBackgroundDemo() {
   return (
     <AuroraBackground>
-      {/* Swiper Carousel */}
-      <div className="w-full max-w-3xl relative">
+      {/* ✅ Wrapper centered and padded */}
+      <div className="w-full max-w-4xl mx-auto px-4 relative z-10">
         <Swiper
           modules={[Pagination, Autoplay, Navigation]}
           spaceBetween={20}
           slidesPerView={1}
           pagination={{ clickable: true }}
           autoplay={{ delay: 3000 }}
-          navigation // Enables left & right arrows
-          className="rounded-lg shadow-lg w-full max-w-3xl h-[400px]"
+          navigation
+          className="rounded-lg shadow-lg w-full h-[400px]"
         >
           {/* Slide 1 */}
           <SwiperSlide>
