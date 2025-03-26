@@ -33,7 +33,7 @@ export const AuroraBackground = ({
             filter blur-[20px] opacity-80
             after:content-[""] after:absolute after:inset-0 after:[background-image:var(--aurora)] 
             after:[background-size:200%,_100%] 
-            after:animate-aurora after:[background-attachment:fixed] after:mix-blend-screen
+            after:animate-aurora after:mix-blend-screen
             pointer-events-none absolute inset-0 opacity-50 will-change-transform`,
 
             showRadialGradient &&
