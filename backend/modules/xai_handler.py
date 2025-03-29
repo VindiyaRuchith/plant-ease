@@ -7,7 +7,7 @@ class XAIHandler:
         self.model = model
 
     def hires_cam(self, img_array, class_index):
-        """Generate a heatmap using HiRes-CAM."""
+        """Generate a heatmap using HiRes-CAM with summation across channels."""
         try:
             last_conv_layer = [layer for layer in self.model.layers if 'conv' in layer.name][-1]
             grad_model = tf.keras.models.Model([self.model.input], [last_conv_layer.output, self.model.output])
@@ -19,7 +19,8 @@ class XAIHandler:
             grads = tape.gradient(loss, conv_outputs)
             heatmap = conv_outputs * grads
             heatmap = np.maximum(heatmap, 0)
-            heatmap = np.mean(heatmap, axis=-1)[0]
+            # Instead of averaging, sum across the channels:
+            heatmap = np.sum(heatmap, axis=-1)[0]
             heatmap /= np.max(heatmap) + 1e-8
             heatmap = cv2.resize(heatmap, (224, 224))
             return heatmap
@@ -32,7 +33,8 @@ class XAIHandler:
         try:
             # Get the last convolutional layer
             last_conv_layer = [layer for layer in self.model.layers if 'conv' in layer.name][-1]
-            # Build a model that maps the input image to the activations of the last conv layer and the model's output predictions.
+            # Build a model that maps the input image to the activations of the last conv layer
+            # and the model's output predictions.
             grad_model = tf.keras.models.Model([self.model.input], [last_conv_layer.output, self.model.output])
             
             with tf.GradientTape() as tape1:
@@ -44,10 +46,10 @@ class XAIHandler:
                 first_derivative = tape2.gradient(loss, conv_outputs)
             second_derivative = tape1.gradient(first_derivative, conv_outputs)
             
-            # Computing the alpha coefficients for Grad-CAM++.
+            # Compute the alpha coefficients for Grad-CAM++.
             alpha_num = second_derivative
             alpha_denom = 2 * second_derivative + tf.square(grads)
-            # Preventing division by zero by adding a small constant where needed.
+            # Prevent division by zero by adding a small constant where needed.
             alpha_denom = tf.where(tf.equal(alpha_denom, 0.0), tf.ones_like(alpha_denom) * 1e-10, alpha_denom)
             alphas = alpha_num / alpha_denom
             
@@ -57,7 +59,7 @@ class XAIHandler:
             deep_linearization_weights = tf.reduce_sum(alphas * weights, axis=(1, 2))
             
             # Multiply the weights with the conv outputs and sum over the channels.
-            conv_outputs = conv_outputs[0]  # Removing batch dimension
+            conv_outputs = conv_outputs[0]  # Remove batch dimension
             heatmap = tf.reduce_sum(deep_linearization_weights[0] * conv_outputs, axis=-1)
             heatmap = tf.maximum(heatmap, 0)
             heatmap /= tf.reduce_max(heatmap) + 1e-8

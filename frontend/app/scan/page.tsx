@@ -36,7 +36,7 @@ export default function ScanPage() {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `https://updatedbackend-1011086252108.asia-south1.run.app/classify?cam_type=${camType}`,
+        `https://fyp-556001537402.asia-south1.run.app//classify?cam_type=${camType}`,
         {
           method: "POST",
           body: formData,
