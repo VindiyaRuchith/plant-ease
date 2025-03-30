@@ -7,7 +7,7 @@ class XAIHandler:
         self.model = model
 
     def hires_cam(self, img_array, class_index):
-        """Generate a heatmap using HiRes-CAM with summation across channels."""
+        # Generate a heatmap using HiRes-CAM with summation across channels
         try:
             last_conv_layer = [layer for layer in self.model.layers if 'conv' in layer.name][-1]
             grad_model = tf.keras.models.Model([self.model.input], [last_conv_layer.output, self.model.output])
@@ -29,7 +29,7 @@ class XAIHandler:
             raise ValueError(f"Error in HiRes-CAM: {str(e)}")
     
     def grad_cam_plus(self, img_array, class_index):
-        """Generate a heatmap using Grad-CAM++."""
+        # Generate a heatmap using Grad-CAM++.
         try:
             # Get the last convolutional layer
             last_conv_layer = [layer for layer in self.model.layers if 'conv' in layer.name][-1]

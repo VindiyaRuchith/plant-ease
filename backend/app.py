@@ -9,7 +9,7 @@ from modules.utils import Utils
 import gdown
 import os
 
-MODEL_URL = "https://drive.google.com/uc?id=1y11xMYyd2XaVUWSJ4zK6w2vNOCkwDcXG"
+MODEL_URL = "https://drive.google.com/uc?id=1XJDKqFv7Tudzvqg3ZlNqCmWDpMlUSd2M"
 MODEL_LOCAL_PATH = os.path.join(os.getcwd(), 'model.h5')
 
 # Download the model if not done already
@@ -28,7 +28,7 @@ class_names = ["healthy cinnamon", "leaf spot disease", "rough bark", "stripe ca
 
 @app.route('/')
 def index():
-    return "Flask backend is running ✅"
+    return "Flask backend is running"
 
 @app.route('/classify', methods=['POST'])
 def classify_image():
@@ -51,7 +51,7 @@ def classify_image():
         confidence = float(predictions[0][predicted_class])
 
         # Check confidence threshold
-        if confidence < 0.7:
+        if confidence < 0.45:
             return jsonify({"error": "The image does not appear to be a cinnamon leaf."}), 400
 
         # Read cam_type from query parameter (default to 'hires')
