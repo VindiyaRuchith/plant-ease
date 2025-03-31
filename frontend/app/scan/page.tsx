@@ -137,6 +137,15 @@ export default function ScanPage() {
               height={300}
               className="rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
             />
+
+            <div className="mt-4 flex flex-col items-center">
+              <div className="flex w-60 h-4 bg-gradient-to-r from-blue-600 via-green-200 to-red-600 rounded-full shadow-inner" />
+              <div className="flex justify-between w-60 text-xs mt-1 text-gray-600 dark:text-gray-300">
+                <span>Less Important</span>
+                <span>Medium Importance</span>
+                <span>Most Important</span>
+              </div>
+            </div>
           </div>
         )}
 

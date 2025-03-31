@@ -53,10 +53,12 @@ const AboutUs = () => {
             We are always looking to improve PLANT-EASE. 
             If you have feedback, suggestions, or need help, feel free to reach out!
           </p>
-          <a href="plantease@gmail.com" className="flex items-center space-x-2 text-blue-600 hover:underline">
-            <Mail className="w-5 h-5" />
-            <span>Email Us</span>
-          </a>
+          <div className="flex justify-center mt-4">
+            <a href="mailto:plantease@gmail.com" className="flex items-center space-x-2 text-blue-600 hover:underline">
+              <Mail className="w-5 h-5" />
+              <span>Email Us</span>
+            </a>
+          </div>
         </div>
       </div>
 
