@@ -6,7 +6,7 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.metrics import AUC, Precision, Recall
 import os
 import numpy as np
-from sklearn.metrics import classification_report, roc_auc_score, roc_curve
+from sklearn.metrics import classification_report, accuracy_score
 import matplotlib.pyplot as plt
 
 # Paths
@@ -41,14 +41,14 @@ train_datagen = ImageDataGenerator(
 # No augmentation for validation
 val_datagen = ImageDataGenerator(rescale=1./255)
 
-# Data generators
+# Data generators 
 train_generator = train_datagen.flow_from_dataframe(
     dataframe=df_train,
     x_col='image_path',
     y_col=['healthy_cinnamon', 'leaf_spot_disease', 'rough_bark', 'stripe_canker'],
     target_size=IMG_SIZE,
     batch_size=BATCH_SIZE,
-    class_mode='raw',
+    class_mode='raw',  # one-hot labels
     shuffle=True
 )
 
@@ -73,14 +73,14 @@ x = MaxPooling2D((2, 2))(x)
 x = Flatten()(x)
 x = Dense(128, activation='relu')(x)
 x = Dropout(0.5)(x)
-output_layer = Dense(4, activation='sigmoid')(x)
+output_layer = Dense(4, activation='softmax')(x)  # softmax for multi-class
 
 model = Model(inputs=input_layer, outputs=output_layer)
 
-# Compile with metrics
+# Compile with appropriate loss
 model.compile(
     optimizer='adam',
-    loss='binary_crossentropy',
+    loss='categorical_crossentropy',  # for one-hot multi-class
     metrics=['accuracy', Precision(), Recall(), AUC(name='auc')]
 )
 
@@ -93,5 +93,4 @@ history = model.fit(
 )
 
 # Save model
-model.save(r"C:\Users\Vindiya\Desktop\model.h5")
-
+model.save(r"C:\Users\Vindiya\Desktop\model_multiclass.h5")
