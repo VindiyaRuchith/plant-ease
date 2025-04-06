@@ -1,12 +1,16 @@
-// pages/about.tsx
-
+// Import icons from react-icons and lucide-react
 import { FaSeedling, FaBrain, FaEnvelope, FaLeaf } from 'react-icons/fa';
 import { Mail } from 'lucide-react';
 
+// Main AboutUs component
 const AboutUs = () => {
   return (
+    // Page wrapper with gradient background and centered content
     <div className="bg-gradient-to-b from-green-200 to-green-500 min-h-screen flex flex-col items-center justify-center p-6">
+
+      {/* Main card container */}
       <div className="bg-white rounded-lg shadow-2xl p-10 max-w-5xl text-center">
+        
         {/* Hero Section */}
         <div className="mb-10">
           <h1 className="text-4xl font-extrabold text-green-700 mb-4">
@@ -18,7 +22,9 @@ const AboutUs = () => {
           </p>
         </div>
 
+        {/* Mission & Why Choose Us Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
           {/* Mission Section */}
           <div className="bg-green-100 rounded-lg p-6 shadow-md hover:shadow-lg transform hover:scale-105 transition-all">
             <h2 className="text-xl font-bold text-green-700 flex items-center gap-2 mb-4">
@@ -53,6 +59,8 @@ const AboutUs = () => {
             We are always looking to improve PLANT-EASE. 
             If you have feedback, suggestions, or need help, feel free to reach out!
           </p>
+
+          {/* Email link with icon */}
           <div className="flex justify-center mt-4">
             <a href="mailto:plantease@gmail.com" className="flex items-center space-x-2 text-blue-600 hover:underline">
               <Mail className="w-5 h-5" />

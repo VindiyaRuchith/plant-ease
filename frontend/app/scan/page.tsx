@@ -1,29 +1,34 @@
-"use client";
+"use client"; 
 
 import React, { useState } from "react";
 import Image from "next/image";
 import { FileUpload } from "@/components/ui/file-upload";
 
 export default function ScanPage() {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [prediction, setPrediction] = useState<string | null>(null);
-  const [heatmap, setHeatmap] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [resetKey, setResetKey] = useState(0); // To force re-render FileUpload
+  // State Management 
+  const [selectedFile, setSelectedFile] = useState<File | null>(null); // uploaded file
+  const [prediction, setPrediction] = useState<string | null>(null);   // predicted class name
+  const [heatmap, setHeatmap] = useState<string | null>(null);         // base64 heatmap image
+  const [error, setError] = useState<string | null>(null);             // error message
+  const [isLoading, setIsLoading] = useState(false);                   // loading state
+  const [resetKey, setResetKey] = useState(0);                         // forces re-render of FileUpload
 
+  // File Upload Handler
   const handleFileUpload = (files: File[]) => {
     if (files.length > 0) {
       const file = files[0];
+      // Only allow image files
       if (!file.type.startsWith("image/")) {
         setError("Only image files are allowed.");
         return;
       }
       setSelectedFile(file);
-      setError(null);
+      // clear previous errors
+      setError(null); 
     }
   };
 
+  // Submit to Backend 
   const handleSubmit = async (camType: string) => {
     if (!selectedFile) {
       setError("Please upload an image first.");
@@ -33,46 +38,56 @@ export default function ScanPage() {
     const formData = new FormData();
     formData.append("image", selectedFile);
 
-    setIsLoading(true);
+    // show loading state
+    setIsLoading(true); 
     try {
       const response = await fetch(
-        `https://fyp-556001537402.asia-south1.run.app/classify?cam_type=${camType}`,
+        `https://fyp-556001537402.asia-south1.run.app/classify?cam_type=${camType}`, // call Flask backend
         {
           method: "POST",
           body: formData,
         }
       );
 
+      // Handle error responses
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to classify the image.");
       }
 
+      // Handle successful response
       const data = await response.json();
-      setPrediction(data.prediction);
-      setHeatmap(data.cam_path);
+      // update prediction text
+      setPrediction(data.prediction); 
+      // update heatmap image
+      setHeatmap(data.cam_path);      
     } catch (err: unknown) {
+      // Error handling
       if (err instanceof Error) {
         setError(err.message);
       } else {
         setError("Something went wrong!");
       }
     } finally {
-      setIsLoading(false);
+      // stop loading indicator
+      setIsLoading(false); 
     }
   };
 
+  // Reset State 
   const handleReset = () => {
     setSelectedFile(null);
     setPrediction(null);
     setHeatmap(null);
     setError(null);
-    setResetKey((prev) => prev + 1); // re-render FileUpload
+    // force re-render of FileUpload component
+    setResetKey((prev) => prev + 1); 
   };
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-b from-green-400 via-green-600 to-green-800">
       <div className="w-full max-w-4xl mx-auto min-h-96 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg p-6 flex flex-col items-center">
+        {/* Page Title */}
         <h1 className="text-3xl font-extrabold text-green-800 dark:text-green-300 mb-6">
           Scan an Image
         </h1>
@@ -80,7 +95,7 @@ export default function ScanPage() {
         {/* File Upload Component */}
         <FileUpload key={resetKey} onChange={handleFileUpload} />
 
-        {/* Buttons for HiRes-CAM and Grad-CAM++ */}
+        {/* HiRes-CAM and Grad-CAM++ Buttons */}
         <div className="flex gap-4 mt-6">
           <button
             onClick={() => handleSubmit("hires")}
@@ -107,15 +122,15 @@ export default function ScanPage() {
           </button>
         </div>
 
-        {/* Loading */}
+        {/* Loading State */}
         {isLoading && (
           <p className="text-yellow-400 mt-4 text-lg">Processing image...</p>
         )}
 
-        {/* Error message */}
+        {/* Error Display */}
         {error && <p className="text-red-500 mt-4 text-lg">{error}</p>}
 
-        {/* Prediction display */}
+        {/* Prediction Display */}
         {prediction && (
           <div className="mt-6">
             <p className="text-xl font-semibold text-green-800 dark:text-green-300">
@@ -124,12 +139,14 @@ export default function ScanPage() {
           </div>
         )}
 
-        {/* Heatmap display */}
+        {/* Heatmap Display */}
         {heatmap && (
           <div className="mt-6">
             <p className="text-xl font-semibold text-green-800 dark:text-green-300 mb-4">
               Heatmap:
             </p>
+
+            {/* Base64 image returned from backend */}
             <Image
               src={`data:image/png;base64,${heatmap}`}
               alt="XAI Heatmap"
@@ -138,6 +155,7 @@ export default function ScanPage() {
               className="rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
             />
 
+            {/* Legend for heatmap importance */}
             <div className="mt-4 flex flex-col items-center">
               <div className="flex w-60 h-4 bg-gradient-to-r from-blue-600 via-green-200 to-red-600 rounded-full shadow-inner" />
               <div className="flex justify-between w-60 text-xs mt-1 text-gray-600 dark:text-gray-300">
