@@ -39,6 +39,7 @@ export default function ScanPage() {
         `https://grad-556001537402.asia-south1.run.app/classify?cam_type=${camType}`,
         {
           method: "POST",
+          
           body: formData,
         }
       );
