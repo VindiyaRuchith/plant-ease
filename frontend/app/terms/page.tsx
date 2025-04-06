@@ -1,9 +1,14 @@
+// Import legal icons for each section
 import { FaFileContract, FaShieldAlt, FaLock, FaGavel } from 'react-icons/fa';
 
 const TermsOfService = () => {
     return (
+        // Page wrapper with a blue gradient background and centered content
         <div className="bg-gradient-to-b from-blue-200 to-blue-500 min-h-screen flex flex-col items-center justify-center p-6">
+
+            {/* Main content card */}
             <div className="bg-white rounded-lg shadow-2xl p-10 max-w-5xl text-center">
+
                 {/* Hero Section */}
                 <div className="mb-10">
                     <h1 className="text-4xl font-extrabold text-blue-700 mb-4">
@@ -15,8 +20,10 @@ const TermsOfService = () => {
                     </p>
                 </div>
 
+                {/* Terms Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Acceptance of Terms */}
+
+                    {/* --- Acceptance of Terms --- */}
                     <div className="bg-blue-100 rounded-lg p-6 shadow-md hover:shadow-lg transform hover:scale-105 transition-all">
                         <h2 className="text-xl font-bold text-blue-700 flex items-center gap-2 mb-4">
                             <FaFileContract className="text-blue-500 text-3xl" /> Acceptance of Terms
@@ -57,7 +64,7 @@ const TermsOfService = () => {
                     </div>
                 </div>
 
-                {/* Changes to Terms */}
+                {/* Changes to Terms Section */}
                 <div className="bg-blue-200 rounded-lg p-6 mt-8 shadow-md hover:shadow-lg transform hover:scale-105 transition-all">
                     <h2 className="text-xl font-bold text-blue-800 flex items-center gap-2 mb-4">
                         <FaFileContract className="text-blue-600 text-3xl" /> Changes to Terms
@@ -68,7 +75,7 @@ const TermsOfService = () => {
                 </div>
             </div>
 
-            {/* Footer */}
+            {/* Footer Section */}
             <div className="mt-10 text-center">
                 <FaGavel className="text-blue-700 text-5xl mx-auto mb-2" />
                 <p className="text-white text-sm">© 2024 PLANT-EASE | Safeguarding Your Plantation Success</p>
