@@ -117,6 +117,33 @@ export default function AuroraBackgroundDemo() {
             </div>
           </SwiperSlide>
 
+          {/*Slide 4*/}
+          <SwiperSlide>
+            <div className="h-full flex items-center justify-center">
+              <div
+                className="text-center text-white flex flex-col justify-center items-center w-full h-full"
+                style={{
+                  // Reusing the same image
+                  backgroundImage: `url("/public/cinnamon.jpg")`, 
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  borderRadius: "10px",
+                  height: "100%",
+                  width: "100%",
+                }}
+              >
+                {/*Link to the about page*/}
+                <Link
+                  href="/howto"
+                  className="inline-block mt-4 px-6 py-3 text-lg font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-full shadow-md transition-all transform hover:scale-105"
+                >
+                  Learn More About Us
+                </Link>
+              </div>
+            </div>
+          </SwiperSlide>
+
+
         </Swiper>
       </div>
 
