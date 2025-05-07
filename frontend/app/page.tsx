@@ -20,6 +20,9 @@ export default function AuroraBackgroundDemo() {
   return (
     // Wrap everything in a custom animated background component
     <AuroraBackground>
+      <h1 className="text-4xl font-bold text-green-600 text-center mb-6">
+        PLANT-EASE
+      </h1>
       {/* Container centered on screen with padding */}
       <div className="w-full max-w-4xl mx-auto px-4 relative z-10">
 
@@ -47,7 +50,7 @@ export default function AuroraBackgroundDemo() {
                 className="text-center text-white flex flex-col justify-center items-center w-full h-full"
                 style={{
                   // Background image
-                  backgroundImage: `url("/public/cinnamon.jpg")`, 
+                  backgroundImage: `url("/cinnamon.jpg")`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   borderRadius: "10px",
@@ -73,7 +76,7 @@ export default function AuroraBackgroundDemo() {
                 className="text-center text-white flex flex-col justify-center items-center w-full h-full"
                 style={{
                   // Reusing the same image
-                  backgroundImage: `url("/public/cinnamon.jpg")`, 
+                  backgroundImage: `url("/cinnamon.jpg")`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   borderRadius: "10px",
@@ -124,7 +127,7 @@ export default function AuroraBackgroundDemo() {
                 className="text-center text-white flex flex-col justify-center items-center w-full h-full"
                 style={{
                   // Reusing the same image
-                  backgroundImage: `url("/public/cinnamon.jpg")`, 
+                  backgroundImage: `url("/cinnamon.jpg")`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   borderRadius: "10px",
@@ -132,12 +135,12 @@ export default function AuroraBackgroundDemo() {
                   width: "100%",
                 }}
               >
-                {/*Link to the about page*/}
+                {/*Link to the demo page*/}
                 <Link
                   href="/howto"
                   className="inline-block mt-4 px-6 py-3 text-lg font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-full shadow-md transition-all transform hover:scale-105"
                 >
-                  Learn More About Us
+                  Need Some Help?
                 </Link>
               </div>
             </div>
