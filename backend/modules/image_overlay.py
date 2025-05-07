@@ -4,7 +4,7 @@ from PIL import Image
 from io import BytesIO
 import base64
 
-class Utils:
+class ImageOverlay:
     @staticmethod
     def overlay_heatmap(image_path, heatmap, confidence):
         # Open the original image and convert to RGB format
@@ -26,7 +26,7 @@ class Utils:
         superimposed_image = cv2.addWeighted(heatmap, 0.5, original_image, 1 - 0.5, 0)
 
         # Convert final image to base64 and return
-        return Utils.image_to_base64(superimposed_image)
+        return ImageOverlay.image_to_base64(superimposed_image)
 
     @staticmethod
     def image_to_base64(image):

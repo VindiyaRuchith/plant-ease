@@ -12,7 +12,7 @@ from modules.image_processor import ImageProcessor
 # Generates Grad-CAM++ or HiRes-CAM
 from modules.xai_handler import XAIHandler
 # Utilities for overlaying heatmap, etc.
-from modules.utils import Utils                     
+from modules.image_overlay import ImageOverlay                     
 
 MODEL_LOCAL_PATH = os.path.join(os.path.dirname(__file__), 'model.h5')
 
@@ -80,7 +80,7 @@ def classify_image():
             heatmap = xai_handler.hires_cam(img_array, predicted_class)
 
         # Overlay Heatmap on Original Image
-        img_str = Utils.overlay_heatmap(file_path, heatmap, confidence)
+        img_str = ImageOverlay.overlay_heatmap(file_path, heatmap, confidence)
 
         # Return Prediction and Heatmap Path 
         return jsonify({
