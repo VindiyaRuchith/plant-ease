@@ -40,6 +40,7 @@ export default function Sidebar() {
             <SidebarLink href="/about" label="About Us" icon={<Info />} onClick={() => setIsOpen(false)} />
             <SidebarLink href="/terms" label="Terms of Service" icon={<FileText />} onClick={() => setIsOpen(false)} />
             <SidebarLink href="/scan" label="Scan Plant" icon={<ScanLine />} onClick={() => setIsOpen(false)} />
+            <SidebarLink href="/howto" label="How to Use" icon={<FileText />} onClick={() => setIsOpen(false)} />
           </nav>
         </div>
       </div>
