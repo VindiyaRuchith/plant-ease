@@ -78,30 +78,27 @@ export default function ScanPage() {
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-b from-green-400 via-green-600 to-green-800">
-      {/* Main Container */}
-      <div className="w-full max-w-4xl mx-auto min-h-96 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg p-6 flex flex-col items-center">
+      {/* Main Container with `relative` to support absolute positioning for Close Button */}
+      <div className="w-full max-w-4xl mx-auto min-h-96 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg p-6 flex flex-col items-center relative">
 
         {/* Page Title */}
         <h1 className="text-3xl font-extrabold text-green-800 dark:text-green-300 mb-6">
           Scan an Image
         </h1>
 
-        {/* File Upload + Close Button in Row */}
-        <div className="flex items-center gap-4 w-full justify-center">
-          {/* File Upload Component */}
-          <FileUpload key={resetKey} onChange={handleFileUpload} />
+        {/* Close Button (only visible if there is data to reset) */}
+        {(prediction || heatmap || selectedFile) && (
+          <button
+            onClick={handleReset}
+            className="absolute top-4 right-4 text-red-500 hover:text-red-700 text-2xl font-bold"
+            aria-label="Close"
+          >
+            ×
+          </button>
+        )}
 
-          {/* Close Button (only when image is uploaded or results exist) */}
-          {(prediction || heatmap || selectedFile) && (
-            <button
-              onClick={handleReset}
-              className="bg-red-500 text-white rounded-full w-10 h-10 text-xl font-bold flex items-center justify-center shadow-md hover:bg-red-600 transition-all"
-              title="Clear uploaded file"
-            >
-              ×
-            </button>
-          )}
-        </div>
+        {/* File Upload Component */}
+        <FileUpload key={resetKey} onChange={handleFileUpload} />
 
         {/* HiRes-CAM and Grad-CAM++ Buttons */}
         <div className="flex gap-4 mt-6">
@@ -173,6 +170,16 @@ export default function ScanPage() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Upload New Image Button */}
+        {(prediction || heatmap || selectedFile) && (
+          <button
+            onClick={handleReset}
+            className="bg-red-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-red-600 transition-all transform hover:scale-105 mt-6"
+          >
+            Upload New Image
+          </button>
         )}
       </div>
     </div>
