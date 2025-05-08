@@ -11,12 +11,14 @@ const HowToUse = () => {
         {/* Demo Video Section */}
         <div className="bg-white rounded-lg shadow-xl p-6">
           <h2 className="text-2xl font-bold text-green-700 mb-4 text-center">Watch the Demo</h2>
-          <iframe 
-            src="https://www.youtube.com/embed/767n3Y7qSHk"
-            title="PLANT-EASE Demo"
-            className="w-full h-[360px] md:h-[400px] rounded-md"
-            allowFullScreen
-          />
+          <div className="aspect-w-16 aspect-h-9">
+            <iframe 
+              src="https://www.youtube.com/embed/767n3Y7qSHk" // Replace with your actual video URL
+              title="PLANT-EASE Demo"
+              className="w-full h-full rounded-md"
+              allowFullScreen
+            />
+          </div>
         </div>
 
         {/* Steps Section */}
