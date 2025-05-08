@@ -173,13 +173,17 @@ export default function ScanPage() {
         )}
 
         {/* Upload New Image Button */}
+        {/* Close Button (visible only when image is uploaded) */}
         {(prediction || heatmap || selectedFile) && (
-          <button
+          <div className="w-full flex justify-end px-2 mb-2">
+            <button
             onClick={handleReset}
-            className="bg-red-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-red-600 transition-all transform hover:scale-105 mt-6"
-          >
-            Upload New Image
-          </button>
+            className="bg-red-500 text-white rounded-full w-10 h-10 text-xl font-bold flex items-center justify-center shadow-md hover:bg-red-600 transition-all"
+            title="Clear uploaded file"
+            >
+              ×
+            </button>
+          </div>
         )}
       </div>
     </div>
