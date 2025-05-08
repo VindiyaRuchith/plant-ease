@@ -6,22 +6,26 @@ import { FileUpload } from "@/components/ui/file-upload";
 
 export default function ScanPage() {
   // State Management 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null); // uploaded file
+  const [selectedFile, setSelectedFile] = useState<File | null>(null); // uploaded image file
   const [prediction, setPrediction] = useState<string | null>(null);   // predicted class name
   const [heatmap, setHeatmap] = useState<string | null>(null);         // base64 heatmap image
   const [error, setError] = useState<string | null>(null);             // error message
   const [isLoading, setIsLoading] = useState(false);                   // loading state
   const [resetKey, setResetKey] = useState(0);                         // forces re-render of FileUpload
+  const [hasFile, setHasFile] = useState(false);                      // tracks any file upload attempt
 
   // File Upload Handler
   const handleFileUpload = (files: File[]) => {
     if (files.length > 0) {
       const file = files[0];
+      setHasFile(true); // track that some file has been uploaded
+
       // Only allow image files
       if (!file.type.startsWith("image/")) {
         setError("Only image files are allowed.");
         return;
       }
+
       setSelectedFile(file);
       setError(null); // clear previous errors
     }
@@ -73,12 +77,13 @@ export default function ScanPage() {
     setPrediction(null);
     setHeatmap(null);
     setError(null);
+    setHasFile(false); // reset file presence state
     setResetKey((prev) => prev + 1); // force re-render of FileUpload component
   };
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-b from-green-400 via-green-600 to-green-800">
-      {/* Main Container with `relative` to support absolute positioning for Close Button */}
+      {/* Main Container */}
       <div className="w-full max-w-4xl mx-auto min-h-96 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg p-6 flex flex-col items-center relative">
 
         {/* Page Title */}
@@ -86,8 +91,8 @@ export default function ScanPage() {
           Scan an Image
         </h1>
 
-        {/* Close Button (only visible if there is data to reset) */}
-        {(prediction || heatmap || selectedFile) && (
+        {/* Close Button (visible as soon as any file is uploaded) */}
+        {hasFile && (
           <button
             onClick={handleReset}
             className="absolute top-4 right-4 text-red-500 hover:text-red-700 text-2xl font-bold"
