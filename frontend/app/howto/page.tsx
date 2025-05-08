@@ -15,7 +15,7 @@ const HowToUse = () => {
             <iframe 
               src="https://www.youtube.com/embed/767n3Y7qSHk" // Replace with your actual video URL
               title="PLANT-EASE Demo"
-              className="w-full h-full rounded-md"
+              className="w-full h-[360px] rounded-md"
               allowFullScreen
             />
           </div>
