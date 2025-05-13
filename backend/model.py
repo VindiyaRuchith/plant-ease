@@ -37,7 +37,7 @@ BATCH_SIZE = 32
 
 # Image Augmentation
 
-# Training data augmentation to improve generalization
+# Training data preprocessing and augmentation to improve generalization
 train_datagen = ImageDataGenerator(
     # Normalize pixel values to [0,1]
     rescale=1./255,

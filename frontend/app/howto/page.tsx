@@ -13,7 +13,7 @@ const HowToUse = () => {
           <h2 className="text-2xl font-bold text-green-700 mb-4 text-center">Watch the Demo</h2>
           <div className="aspect-w-16 aspect-h-9">
             <iframe 
-              src="https://www.youtube.com/embed/l-lbkWTwKb4" // Replace with your actual video URL
+              src="https://www.youtube.com/embed/l-lbkWTwKb4" 
               title="PLANT-EASE Demo"
               className="w-full h-[360px] rounded-md"
               allowFullScreen
@@ -27,7 +27,7 @@ const HowToUse = () => {
           <ol className="list-decimal list-inside space-y-3 text-gray-700 text-lg">
             <li>Go to the <span className="font-semibold text-green-800">Scan</span> page.</li>
             <li>Click <span className="font-semibold">Upload Image</span>.</li>
-            <li>Browse and select the image of the cinnamon leaf.</li>
+            <li>Browse and select the image of the cinnamon leaf/Bark.</li>
             <li>Press <span className="font-semibold">OK</span> to confirm.</li>
             <li>Select your preferred XAI method:
               <ul className="list-disc list-inside ml-5 text-sm mt-1">

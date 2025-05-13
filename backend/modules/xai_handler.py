@@ -44,10 +44,8 @@ class XAIHandler:
             raise ValueError(f"Error in HiRes-CAM: {str(e)}")
 
     def grad_cam_plus(self, img_array, class_index):
-        """
-        Generate a heatmap using Grad-CAM++.
-        Uses higher-order derivatives to improve localization compared to basic Grad-CAM.
-        """
+        ## Generate a heatmap using Grad-CAM++.
+        ## Uses higher-order derivatives to improve localization compared to basic Grad-CAM.
         try:
             # Get the last convolutional layer from the model
             last_conv_layer = [layer for layer in self.model.layers if 'conv' in layer.name][-1]
