@@ -11,7 +11,7 @@ from modules.model_handler import ModelHandler
 from modules.image_processor import ImageProcessor
 # Generates Grad-CAM++ or HiRes-CAM
 from modules.xai_handler import XAIHandler
-# Utilities for overlaying heatmap, etc.
+# Utilities for overlaying heatmap
 from modules.image_overlay import ImageOverlay                     
 
 MODEL_LOCAL_PATH = os.path.join(os.path.dirname(__file__), 'model.h5')
@@ -70,7 +70,7 @@ def classify_image():
             }), 400
 
         # Determine Which CAM Method to Use
-        # Optional query param
+        # Optional query parameter to specify CAM type (default is 'hires')
         cam_type = request.args.get('cam_type', 'hires')  
 
         # Generate the appropriate heatmap
@@ -93,7 +93,7 @@ def classify_image():
         logging.error(f"Error during classification: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
-# Uncommented to run Flask app directly
+
 # if __name__ == '__main__':
 #     app.run()
 

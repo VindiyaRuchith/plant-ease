@@ -24,5 +24,5 @@ class ImageProcessor:
             return img, img_array
         
         except Exception as e:
-            # Raise a meaningful error if anything goes wrong during preprocessing
+            # Raise a error if anything goes wrong during preprocessing
             raise ValueError(f"Error preprocessing image {image_path}: {str(e)}")
