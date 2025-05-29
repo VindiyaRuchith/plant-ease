@@ -55,7 +55,7 @@ def classify_image():
 
         # Preprocess Image & Predict Class
         # Resize, normalize, etc.
-        img, img_array = ImageProcessor.preprocess_image(file_path)
+        img_array = ImageProcessor.preprocess_image(file_path)
         # Get predictions
         predictions = model_handler.predict(img_array)
         # Index of highest probability

@@ -1,158 +1,87 @@
-"use client"; // Enables client-side rendering in Next.js 13+
+"use client";
 
-// Import Swiper components and required modules
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay, Navigation } from "swiper/modules";
-
-// Swiper styles
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-
-// Next.js router for navigation links
 import Link from "next/link";
-
-// Custom background components
 import { AuroraBackground } from "@/components/ui/aurora-background";
 import { Boxes } from "@/components/ui/background-boxes";
 
 export default function AuroraBackgroundDemo() {
   return (
-    // Wrap everything in a custom animated background component
     <AuroraBackground>
-      <h1 className="text-4xl font-bold text-green-600 text-center mb-6">
+      <h1 className="text-4xl font-bold text-green-600 text-center mb-10">
         PLANT-EASE
       </h1>
-      {/* Container centered on screen with padding */}
-      <div className="w-full max-w-4xl mx-auto px-4 relative z-10">
 
-        {/*Swiper carousel setup*/}
-        <Swiper
-          // Enable pagination, autoplay, and arrows
-          modules={[Pagination, Autoplay, Navigation]} 
-          // Space between slides
-          spaceBetween={20}
-          // Only one slide visible at a time 
-          slidesPerView={1} 
-          // Dots are clickable
-          pagination={{ clickable: true }} 
-          // Slides auto-change every 3 seconds
-          autoplay={{ delay: 3000 }} 
-          // Show next/previous arrows
-          navigation 
-          className="rounded-lg shadow-lg w-full h-[400px]" // Styling
+      <div className="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+        {/* Container 1 */}
+        <div
+          className="bg-cover bg-center rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-500"
+          style={{ backgroundImage: `url("/cinnamon.jpg")` }}
         >
+          <div className="bg-black/50 flex flex-col justify-center items-center h-full p-8 text-white text-center">
+            <h2 className="text-2xl font-semibold mb-4">Scan Your Image</h2>
+            <p className="mb-4">Instantly check your cinnamon plant's health with AI-powered image scanning.</p>
+            <Link
+              href="/scan"
+              className="px-6 py-3 bg-blue-500 hover:bg-blue-700 rounded-full shadow-md text-white transition-all transform hover:scale-105"
+            >
+              Scan Now
+            </Link>
+          </div>
+        </div>
 
-          {/*Slide 1*/}
-          <SwiperSlide>
-            <div className="h-full flex items-center justify-center">
-              <div
-                className="text-center text-white flex flex-col justify-center items-center w-full h-full"
-                style={{
-                  // Background image
-                  backgroundImage: `url("/cinnamon.jpg")`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  borderRadius: "10px",
-                  height: "100%",
-                  width: "100%",
-                }}
-              >
-                {/*Link to the scan page*/}
-                <Link
-                  href="/scan"
-                  className="inline-block mt-4 px-6 py-3 text-lg font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-full shadow-md transition-all transform hover:scale-105"
-                >
-                  Scan Your Image Now
-                </Link>
-              </div>
-            </div>
-          </SwiperSlide>
+        {/* Container 2 */}
+        <div
+          className="bg-cover bg-center rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-500"
+          style={{ backgroundImage: `url("/cinnamon.jpg")` }}
+        >
+          <div className="bg-black/50 flex flex-col justify-center items-center h-full p-8 text-white text-center">
+            <h2 className="text-2xl font-semibold mb-4">About Us</h2>
+            <p className="mb-4">Learn more about how PLANT-EASE supports sustainable farming with cutting-edge technology.</p>
+            <Link
+              href="/about"
+              className="px-6 py-3 bg-blue-500 hover:bg-blue-700 rounded-full shadow-md text-white transition-all transform hover:scale-105"
+            >
+              Learn More
+            </Link>
+          </div>
+        </div>
 
-          {/*Slide 2*/}
-          <SwiperSlide>
-            <div className="h-full flex items-center justify-center">
-              <div
-                className="text-center text-white flex flex-col justify-center items-center w-full h-full"
-                style={{
-                  // Reusing the same image
-                  backgroundImage: `url("/cinnamon.jpg")`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  borderRadius: "10px",
-                  height: "100%",
-                  width: "100%",
-                }}
-              >
-                {/*Link to the about page*/}
-                <Link
-                  href="/about"
-                  className="inline-block mt-4 px-6 py-3 text-lg font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-full shadow-md transition-all transform hover:scale-105"
-                >
-                  Learn More About Us
-                </Link>
-              </div>
-            </div>
-          </SwiperSlide>
+        {/* Container 3 */}
+        <div
+          className="bg-cover bg-center rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-500"
+          style={{ backgroundImage: `url("/cinnamon.jpg")` }}
+        >
+          <div className="bg-black/50 flex flex-col justify-center items-center h-full p-8 text-white text-center">
+            <h2 className="text-2xl font-semibold mb-4">Terms of Service</h2>
+            <p className="mb-4">Understand how we ensure responsible use and data protection in PLANT-EASE.</p>
+            <Link
+              href="/terms"
+              className="px-6 py-3 bg-blue-500 hover:bg-blue-700 rounded-full shadow-md text-white transition-all transform hover:scale-105"
+            >
+              Read Terms
+            </Link>
+          </div>
+        </div>
 
-          {/*Slide 3*/}
-          <SwiperSlide>
-            <div className="h-full flex items-center justify-center">
-              <div
-                className="text-center text-white flex flex-col justify-center items-center w-full h-full"
-                style={{
-                  backgroundImage: `url("/cinnamon.jpg")`, 
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  borderRadius: "10px",
-                  height: "100%",
-                  width: "100%",
-                }}
-              >
-                {/* Link to the terms page */}
-                <Link
-                  href="/terms"
-                  className="inline-block mt-4 px-6 py-3 text-lg font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-full shadow-md transition-all transform hover:scale-105"
-                >
-                  Read Our Terms of Service
-                </Link>
-              </div>
-            </div>
-          </SwiperSlide>
-
-          {/*Slide 4*/}
-          <SwiperSlide>
-            <div className="h-full flex items-center justify-center">
-              <div
-                className="text-center text-white flex flex-col justify-center items-center w-full h-full"
-                style={{
-                  // Reusing the same image
-                  backgroundImage: `url("/cinnamon.jpg")`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  borderRadius: "10px",
-                  height: "100%",
-                  width: "100%",
-                }}
-              >
-                {/*Link to the demo page*/}
-                <Link
-                  href="/howto"
-                  className="inline-block mt-4 px-6 py-3 text-lg font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-full shadow-md transition-all transform hover:scale-105"
-                >
-                  Need Some Help?
-                </Link>
-              </div>
-            </div>
-          </SwiperSlide>
-
-
-        </Swiper>
+        {/* Container 4 */}
+        <div
+          className="bg-cover bg-center rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-500"
+          style={{ backgroundImage: `url("/cinnamon.jpg")` }}
+        >
+          <div className="bg-black/50 flex flex-col justify-center items-center h-full p-8 text-white text-center">
+            <h2 className="text-2xl font-semibold mb-4">Get Support</h2>
+            <p className="mb-4">Need help using the app? Check out our comprehensive guides and resources.</p>
+            <Link
+              href="/howto"
+              className="px-6 py-3 bg-blue-500 hover:bg-blue-700 rounded-full shadow-md text-white transition-all transform hover:scale-105"
+            >
+              View Help
+            </Link>
+          </div>
+        </div>
       </div>
 
-      {/*Background animated box effect*/}
       <Boxes />
     </AuroraBackground>
   );
 }
-
