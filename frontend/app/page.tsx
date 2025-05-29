@@ -19,7 +19,7 @@ export default function AuroraBackgroundDemo() {
         >
           <div className="bg-black/50 flex flex-col justify-center items-center h-full p-8 text-white text-center">
             <h2 className="text-2xl font-semibold mb-4">Scan Your Image</h2>
-            <p className="mb-4">Instantly check your cinnamon plant's health with AI-powered image scanning.</p>
+            <p className="mb-4">Instantly check your cinnamon plant&apos;s health with AI-powered image scanning.</p>
             <Link
               href="/scan"
               className="px-6 py-3 bg-blue-500 hover:bg-blue-700 rounded-full shadow-md text-white transition-all transform hover:scale-105"
