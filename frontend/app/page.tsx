@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { AuroraBackground } from "@/components/ui/aurora-background";
-import { Boxes } from "@/components/ui/background-boxes";
 
 export default function AuroraBackgroundDemo() {
   return (
