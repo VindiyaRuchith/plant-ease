@@ -6,7 +6,6 @@ import { Boxes } from "@/components/ui/background-boxes";
 
 export default function AuroraBackgroundDemo() {
   return (
-    <div className="relative w-screen h-screen overflow-hidden">
     <AuroraBackground>
       <h1 className="text-4xl font-bold text-green-600 text-center mb-10">
         PLANT-EASE
@@ -81,9 +80,6 @@ export default function AuroraBackgroundDemo() {
           </div>
         </div>
       </div>
-
-      <Boxes />
     </AuroraBackground>
-    </div>
   );
 }
