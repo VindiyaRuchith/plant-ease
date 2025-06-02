@@ -17,32 +17,26 @@ export const AuroraBackground = ({
     <main>
       <div
         className={cn(
-          "transition-bg relative flex h-[100vh] flex-col items-center justify-center bg-zinc-50 text-slate-950 dark:bg-zinc-900",
+          "transition-bg relative flex h-[100vh] flex-col items-center justify-center bg-blue-950 text-white",
           className,
         )}
         {...props}
       >
         <div
           className="absolute inset-0 overflow-hidden"
-          style={
-            {
-              "--aurora":
-                "repeating-linear-gradient(100deg,#3b82f6_10%,#a5b4fc_15%,#93c5fd_20%,#ddd6fe_25%,#60a5fa_30%)",
-              "--dark-gradient":
-                "repeating-linear-gradient(100deg,#000_0%,#000_7%,transparent_10%,transparent_12%,#000_16%)",
-              "--white-gradient":
-                "repeating-linear-gradient(100deg,#fff_0%,#fff_7%,transparent_10%,transparent_12%,#fff_16%)",
+          style={{
+  "--aurora":
+    "repeating-linear-gradient(100deg,#3b82f6_10%,#22d3ee_15%,#06b6d4_20%,#a855f7_25%,#f472b6_30%)",
+  "--blue-300": "#22d3ee", // cyan
+  "--blue-400": "#06b6d4", // bright blue
+  "--blue-500": "#3b82f6", // blue
+  "--indigo-300": "#a855f7", // purple
+  "--violet-200": "#f472b6", // pink
+  "--black": "#000",
+  "--white": "#fff",
+  "--transparent": "transparent",
+} as React.CSSProperties}
 
-              "--blue-300": "#93c5fd",
-              "--blue-400": "#60a5fa",
-              "--blue-500": "#3b82f6",
-              "--indigo-300": "#a5b4fc",
-              "--violet-200": "#ddd6fe",
-              "--black": "#000",
-              "--white": "#fff",
-              "--transparent": "transparent",
-            } as React.CSSProperties
-          }
         >
           <div
             //   I'm sorry but this is what peak developer performance looks like // trigger warning
