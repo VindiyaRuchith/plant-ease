@@ -177,7 +177,7 @@ export const CloseIcon = () => (
 const cards = [
   {
     title: "Scan Your Image",
-    description: "Instantly check your cinnamon plant's health with AI-powered image scanning.",
+    description: "Instantly check your cinnamon plant&apos;s health with AI-powered image scanning.",
     button: "Scan Now",
     link: "/scan",
     content: (
