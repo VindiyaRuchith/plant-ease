@@ -215,7 +215,7 @@ const cards = [
     link: "/howto",
     content: (
       <p>
-        Explore our support section for tutorials, troubleshooting tips, and answers to common questions. We're here to help you get the most out of PLANT-EASE.
+        Explore our support section for tutorials, troubleshooting tips, and answers to common questions. We are here to help you get the most out of PLANT-EASE.
       </p>
     ),
   },
