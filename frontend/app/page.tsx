@@ -71,44 +71,37 @@ export default function AuroraBackgroundDemo() {
                   height={200}
                   src="/cinnamon.jpg"
                   alt={active.title}
-                  className="w-full h-80 lg:h-80 sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-top"
+                  className="w-full h-auto lg:h-auto sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-top"
                 />
               </motion.div>
 
               <div>
-                <div className="flex justify-between items-start p-4">
-                  <div>
-                    <motion.h3
-                      layoutId={`title-${active.title}-${id}`}
-                      className="font-medium text-neutral-700 dark:text-neutral-200 text-base"
+                <div className="p-4">
+                  <div className="flex justify-center">
+                    <Link href={active.link}>
+                    <motion.div
+                    layoutId={`title-${active.title}-${id}`}
+                    className="inline-block px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-full text-base font-semibold cursor-pointer transition duration-200"
                     >
                       {active.title}
-                    </motion.h3>
-                    <motion.p
-                      layoutId={`description-${active.description}-${id}`}
-                      className="text-neutral-600 dark:text-neutral-400 text-base"
-                    >
-                      {active.description}
-                    </motion.p>
+                    </motion.div>
+                    </Link>
                   </div>
-
-                  <motion.div
-                    layout
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="px-4 py-3 text-sm rounded-full font-bold bg-green-500 text-white cursor-pointer"
+                  <motion.p
+                  layoutId={`description-${active.description}-${id}`}
+                  className="text-center mt-4 text-neutral-600 dark:text-neutral-400 text-base"
                   >
-                    <Link href={active.link}>{active.button}</Link>
-                  </motion.div>
+                    {active.description}
+                  </motion.p>
                 </div>
+
                 <div className="pt-4 relative px-4 pb-4">
                   <motion.div
                     layout
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="text-neutral-600 text-xs md:text-sm lg:text-base h-40 md:h-fit flex flex-col items-start gap-4 overflow-auto dark:text-neutral-400 [mask:linear-gradient(to_bottom,white,white,transparent)] [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch]"
+                    className="text-center text-neutral-600 text-xs md:text-sm lg:text-base flex flex-col items-start gap-4 overflow-auto dark:text-neutral-400 [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch]"
                   >
                     {active.content}
                   </motion.div>
@@ -133,18 +126,12 @@ export default function AuroraBackgroundDemo() {
               <div className="w-full h-full bg-gradient-to-tr from-blue-400/20 to-purple-400/20 blur-2xl"></div>
             </div>
             <div className="relative z-10 flex flex-col justify-center items-center h-full p-8 text-white text-center">
-              <motion.h3 layoutId={`title-${card.title}-${id}`} className="text-2xl font-semibold mb-2 drop-shadow-lg">
+              <motion.h3 layoutId={`title-${card.title}-${id}`} className="text-2xl font-semibold mb-2 drop-shadow-x1">
                 {card.title}
               </motion.h3>
               <motion.p layoutId={`description-${card.description}-${id}`} className="mb-2 drop-shadow-md">
                 {card.description}
               </motion.p>
-              <motion.div
-                layout
-                className="px-6 py-3 bg-blue-500 hover:bg-blue-700 rounded-full shadow-md text-white transition-all transform hover:scale-110 hover:shadow-lg"
-              >
-                {card.button}
-              </motion.div>
             </div>
           </motion.div>
         ))}
@@ -156,8 +143,7 @@ export default function AuroraBackgroundDemo() {
 const cards = [
   {
     title: "Scan Your Image",
-    description: "Instantly check your cinnamon plant&apos;s health with AI-powered image scanning.",
-    button: "Scan Now",
+    description: "Instantly check your cinnamon plant's health with AI-powered image scanning.",
     link: "/scan",
     content: (
       <p>
@@ -168,7 +154,6 @@ const cards = [
   {
     title: "About Us",
     description: "Learn more about how PLANT-EASE supports sustainable farming with cutting-edge technology.",
-    button: "Learn More",
     link: "/about",
     content: (
       <p>
@@ -179,7 +164,6 @@ const cards = [
   {
     title: "Terms of Service",
     description: "Understand how we ensure responsible use and data protection in PLANT-EASE.",
-    button: "Read Terms",
     link: "/terms",
     content: (
       <p>
@@ -190,7 +174,6 @@ const cards = [
   {
     title: "Get Support",
     description: "Need help using the app? Check out our comprehensive guides and resources.",
-    button: "View Help",
     link: "/howto",
     content: (
       <p>

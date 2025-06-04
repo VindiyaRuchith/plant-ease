@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { FileUpload } from "@/components/ui/file-upload";
+import { AuroraBackground } from "@/components/ui/aurora-background";
+
 
 export default function ScanPage() {
   // State Management 
@@ -82,16 +84,17 @@ export default function ScanPage() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-b from-green-400 via-green-600 to-green-800">
+  <AuroraBackground>
+    <div className="w-full min-h-screen flex items-center justify-center p-6">
       {/* Main Container */}
       <div className="w-full max-w-4xl mx-auto min-h-96 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg p-6 flex flex-col items-center relative">
-
+        
         {/* Page Title */}
         <h1 className="text-3xl font-extrabold text-green-800 dark:text-green-300 mb-6">
           Scan an Image
         </h1>
 
-        {/* Close Button (visible as soon as any file is uploaded) */}
+        {/* Close Button */}
         {hasFile && (
           <button
             onClick={handleReset}
@@ -105,7 +108,7 @@ export default function ScanPage() {
         {/* File Upload Component */}
         <FileUpload key={resetKey} onChange={handleFileUpload} />
 
-        {/* HiRes-CAM and Grad-CAM++ Buttons */}
+        {/* Buttons for XAI Types */}
         <div className="flex gap-4 mt-6">
           <button
             onClick={() => handleSubmit("hires")}
@@ -132,15 +135,11 @@ export default function ScanPage() {
           </button>
         </div>
 
-        {/* Loading State */}
+        {/* Feedback Section */}
         {isLoading && (
           <p className="text-yellow-400 mt-4 text-lg">Processing image...</p>
         )}
-
-        {/* Error Display */}
         {error && <p className="text-red-500 mt-4 text-lg">{error}</p>}
-
-        {/* Prediction Display */}
         {prediction && (
           <div className="mt-6">
             <p className="text-xl font-semibold text-green-800 dark:text-green-300">
@@ -149,14 +148,12 @@ export default function ScanPage() {
           </div>
         )}
 
-        {/* Heatmap Display */}
+        {/* Heatmap Result */}
         {heatmap && (
           <div className="mt-6">
             <p className="text-xl font-semibold text-green-800 dark:text-green-300 mb-4">
               Heatmap:
             </p>
-
-            {/* Base64 image returned from backend */}
             <Image
               src={`data:image/png;base64,${heatmap}`}
               alt="XAI Heatmap"
@@ -164,8 +161,6 @@ export default function ScanPage() {
               height={300}
               className="rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
             />
-
-            {/* Legend for heatmap importance */}
             <div className="mt-4 flex flex-col items-center">
               <div className="flex w-60 h-4 bg-gradient-to-r from-blue-600 via-green-200 to-red-600 rounded-full shadow-inner" />
               <div className="flex justify-between w-60 text-xs mt-1 text-gray-600 dark:text-gray-300">
@@ -177,7 +172,7 @@ export default function ScanPage() {
           </div>
         )}
 
-        {/* Upload New Image Button */}
+        {/* Reset Button */}
         {(prediction || heatmap || selectedFile) && (
           <button
             onClick={handleReset}
@@ -188,5 +183,7 @@ export default function ScanPage() {
         )}
       </div>
     </div>
-  );
+  </AuroraBackground>
+);
+
 }
