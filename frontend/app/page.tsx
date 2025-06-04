@@ -119,7 +119,7 @@ export default function AuroraBackgroundDemo() {
             key={card.title}
             onClick={() => setActive(card)}
             className="relative group bg-cover bg-center rounded-xl shadow-lg overflow-hidden cursor-pointer transition-transform duration-500 hover:scale-105"
-            style={{ backgroundImage: `url("/cinnamon.jpg")` }}
+            style={{ backgroundImage: `url("cinnamon.jpg")` }}
           >
             <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition duration-500"></div>
             <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500">

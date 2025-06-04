@@ -13,12 +13,14 @@
 // export default nextConfig;
 
 
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  distDir: "out",
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   output: 'export',
+  distDir: 'out',
   basePath: '/plant-ease',
+  images: {
+    unoptimized: true, // Important for static export!
+  },
 };
 
 export default nextConfig;
