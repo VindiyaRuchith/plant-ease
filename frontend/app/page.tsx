@@ -69,7 +69,7 @@ export default function AuroraBackgroundDemo() {
                 <img
                   width={200}
                   height={200}
-                  src="/cinnamon.jpg"
+                  src="cinnamon.jpg"
                   alt={active.title}
                   className="w-full h-auto lg:h-auto sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-top"
                 />
